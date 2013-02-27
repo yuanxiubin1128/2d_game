@@ -29,6 +29,7 @@ int main()
 
   assert(g.numberOfEdges() == 0);
   assert(g.addEdge(a, b) == true);
+
   assert(g.numberOfEdges() == 1);
 
   assert(g.edgesBetween(2, 5).size() == 1);

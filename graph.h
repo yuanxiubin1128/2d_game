@@ -68,19 +68,6 @@ private:
   std::vector<Vertex> m_vertices;
 };
 
-// non-member functions
-
-
-// template <typename T> typename std::vector<T> subtee_breathFirst(const Graph<T>& graph, const T& root);
-// template <typename T> bool connected(const Graph<T>& graph);
-// template <typename T> bool circular(const Graph<T>& graph);
-// template <typename T> typename std::vector<T> path(const Graph<T>& graph, const T& a, const T& b);
-
-
-
-
-// definitions
-
 
 // Edge
 
@@ -191,11 +178,9 @@ size_t Graph<T>::numberOfVertices() const
 template <typename T>
 size_t Graph<T>::numberOfEdges() const
 {
-  size_t retval = 0;
-  std::accumulate(m_vertices.begin(), m_vertices.end(), retval,
-                  [](size_t sum, const Vertex& v)
+  return std::accumulate(m_vertices.begin(), m_vertices.end(), 0,
+                  [](int sum, const Vertex& v)
                   { return sum + v.m_edges.size(); });
-  return retval;
 }
 
 template <typename T>
@@ -305,13 +290,6 @@ std::vector<int> Graph<T>::edgesBetween(const T& source, const T& destination) c
 
 
 template <typename T>
-std::string Graph<T>::serialize() const
-{
-  /// @todo implement me
-  return std::string("");
-}
-
-template <typename T>
 typename std::vector<typename Graph<T>::Vertex >::const_iterator Graph<T>::find(const T& data) const
 {
   return std::find_if(m_vertices.begin(), m_vertices.end(),
@@ -327,62 +305,5 @@ typename std::vector<typename Graph<T>::Vertex >::iterator Graph<T>::find(const 
                       { return v.m_data == &data; });
 }
 
-
-/*
-template <typename T>
-typename std::vector<T> subtee_breathFirst(const Graph<T>& graph, const T& root)
-{
-  std::vector<T> retval;
-  std::vector<T> q;
-
-  q.push_back(root);
-  while (!q.empty()) {
-    T node = q.front();
-    q.pop_front();
-    retval.push_back(node);
-
-    const std::vector<T> neighbours = graph.neighbours(node);
-    typename std::vector<T>::const_iterator it;
-    for (it = neighbours.begin(); it != neighbours.end(); ++it)
-      q.push_back(*it);
-  }
-  return retval;
-}
-
-template <typename T>
-bool connected(const Graph<T>& graph)
-{
-  std::vector<T> connected;
-  const std::vector<T> vertices = graph.vertices();
-
-  typename std::vector<T>::const_iterator it;
-  for (it = vertices.begin(); it != vertices.end(); ++it) {
-    const std::vector<T> neighbours = graph.neighbours(*it);
-    typename std::vector<T>::const_iterator it2;
-    for (it2 = neighbours.begin(); it2 != neighbours.end(); ++it2)
-      connected.push_back(*it2);
-  }
-
-  typename std::vector<T>::const_iterator last = std::unique(connected.begin(), connected.end());
-  return graph.size == std::distance(connected.begin(), last);
-}
-
-template <typename T>
-bool circular(const Graph<T>& graph)
-{
-  /// @todo implemente me
-  return true;
-}
-
-
-template <typename T>
-typename std::vector<T> path(const Graph<T>& graph, const T& a, const T& b)
-{
-   // Dijkstra's algorithm for single-source shortest path
-
-  /// @todo implemente me
-  return 0;
-}
-*/
 
 #endif // GRAPH_H
