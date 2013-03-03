@@ -1,0 +1,11 @@
+*CMakeCache*
+*CMakeFiles*
+*Makefile*
+*cmake
+*.a
+*/core
+.kdev4/
+.kdev_include_paths
+build/
+graph.kdev4
+
