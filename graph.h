@@ -5,6 +5,8 @@
 #include <algorithm>
 
 // directed, weighted
+/// @todo weight type as param too?
+
 template <typename T>
 class Graph {
 
@@ -52,15 +54,11 @@ public:
 
   // Lookup
   bool contains(const T& data) const;
-  std::vector<T> vertices() const;
-  std::vector<T> neighboursOf(const T& data) const;
-  std::vector<int> edgesBetween(const T& source, const T& destination) const;
-
-  std::string serialize() const;
-
+  std::vector<T*> vertices() const;
+  std::vector<T*> neighboursOf(const T& data) const;
+  std::vector<float> edgesBetween(const T& source, const T& destination) const;
 
 private:
-
 
   typename std::vector<Vertex >::const_iterator find(const T& data) const;
   typename std::vector<Vertex >::iterator find(const T& data);
@@ -249,41 +247,42 @@ bool Graph<T>::contains(const T& data) const
 }
 
 template <typename T>
-std::vector<T> Graph<T>::vertices() const
+std::vector<T*> Graph<T>::vertices() const
 {
-  std::vector<T> retval;
+  std::vector<T*> retval;
   std::for_each(m_vertices.begin(), m_vertices.end(),
                 [&retval](const Vertex& v)
-                { retval.push_back(v.m_data); });
+                { retval.push_back( const_cast<T*>(v.m_data)); });
   return retval;
 }
 
 template <typename T>
-std::vector<T> Graph<T>::neighboursOf(const T& data) const
+std::vector<T*> Graph<T>::neighboursOf(const T& data) const
 {
-  typename std::vector<T> retval;
+  typename std::vector<T*> retval;
   typename std::vector<Vertex >::const_iterator vertex_it = find(data);
   if (vertex_it == m_vertices.end())
     return retval;
 
   std::for_each((*vertex_it).m_edges.begin(), (*vertex_it).m_edges.end(),
                 [&retval](const Edge& e)
-                { retval.push_back(e.m_weight); });
+                { retval.push_back( const_cast<T*>(e.m_destination)); });
 
   return retval;
 }
 
 template <typename T>
-std::vector<int> Graph<T>::edgesBetween(const T& source, const T& destination) const
+std::vector<float> Graph<T>::edgesBetween(const T& source, const T& destination) const
 {
-  std::vector<int> retval;
+  std::vector<float> retval;
   typename std::vector<Vertex>::const_iterator vertex_it = find(source);
   if (vertex_it == m_vertices.end())
     return retval;
 
   std::for_each((*vertex_it).m_edges.begin(), (*vertex_it).m_edges.end(),
                 [&retval, &destination](const Edge& e)
-                { if (e.m_destination == &destination) retval.push_back(e.m_weight); });
+                { if (*(e.m_destination) == destination)
+                    retval.push_back(e.m_weight); });
 
   return retval;
 }
@@ -294,7 +293,7 @@ typename std::vector<typename Graph<T>::Vertex >::const_iterator Graph<T>::find(
 {
   return std::find_if(m_vertices.begin(), m_vertices.end(),
                       [&data](const Vertex& v)
-                      { return v.m_data == &data; });
+                      { return *(v.m_data) == data; });
 }
 
 template <typename T>
@@ -302,7 +301,7 @@ typename std::vector<typename Graph<T>::Vertex >::iterator Graph<T>::find(const 
 {
   return std::find_if(m_vertices.begin(), m_vertices.end(),
                       [&data](const Vertex& v)
-                      { return v.m_data == &data; });
+                      { return *(v.m_data) == data; });
 }
 
 
