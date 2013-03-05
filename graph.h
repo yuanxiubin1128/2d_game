@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <iterator>
 
 // directed, weighted
 /// @todo weight type as param too?
@@ -70,10 +71,47 @@ public:
 
 private:
 
+   Graph<T>(const Graph<T>& o) {  /** @todo impelemnt me */ }
+   Graph<T>& operator=(const Graph<T>& o) { /** @todo impelemnt me */ }
+
   typename std::vector<Vertex >::const_iterator find(const_reference data) const;
   typename std::vector<Vertex >::iterator find(const_reference data);
 
   std::vector<Vertex> m_vertices;
+
+public:
+
+   class iterator : public std::iterator<std::forward_iterator_tag,
+                                         value_type,
+                                         difference_type,
+                                         pointer,
+                                         reference>
+   {
+   public:
+     typedef iterator self_type;
+     typedef iterator& reference_self_type;
+     typedef const iterator& const_reference_self_type;
+
+     iterator() { /** @todo impelemnt me */ }
+     ~iterator() { /** @todo impelemnt me */ }
+     iterator(const_reference_self_type o) { /** @todo impelemnt me */ }
+     reference_self_type operator=(const_reference_self_type o) { /** @todo impelemnt me */ }
+
+      reference operator*() { /** @todo impelemnt me */ }
+      pointer operator->() { /** @todo impelemnt me */ }
+
+      self_type &operator++() { /** @todo impelemnt me */ }
+      self_type operator++(int) { /** @todo impelemnt me */ }
+      self_type operator+(difference_type n) { /** @todo impelemnt me */ }
+      self_type &operator+=(difference_type n) { /** @todo impelemnt me */ }
+      bool operator==(const_reference_self_type o) { /** @todo impelemnt me */ return false; }
+      bool operator!=(const_reference_self_type o) { return !(*this == o); }
+   };
+
+   iterator begin() { /** @todo impelemnt me */ }
+   iterator end() { /** @todo impelemnt me */ }
+
+   /// @todo const iterator and cbegin and cend
 };
 
 
