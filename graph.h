@@ -71,8 +71,8 @@ public:
 
 private:
 
-   Graph<T>(const Graph<T>& o) {  /** @todo impelemnt me */ }
-   Graph<T>& operator=(const Graph<T>& o) { /** @todo impelemnt me */ }
+  Graph<T>(const Graph<T>& o) {  /** @todo impelemnt me */ }
+  Graph<T>& operator=(const Graph<T>& o) { /** @todo impelemnt me */ }
 
   typename std::vector<Vertex >::const_iterator find(const_reference data) const;
   typename std::vector<Vertex >::iterator find(const_reference data);
@@ -97,15 +97,15 @@ public:
      iterator(const_reference_self_type o) { /** @todo impelemnt me */ }
      reference_self_type operator=(const_reference_self_type o) { /** @todo impelemnt me */ }
 
-      reference operator*() { /** @todo impelemnt me */ }
-      pointer operator->() { /** @todo impelemnt me */ }
+     reference operator*() { /** @todo impelemnt me */ }
+     pointer operator->() { /** @todo impelemnt me */ }
 
-      self_type &operator++() { /** @todo impelemnt me */ }
-      self_type operator++(int) { /** @todo impelemnt me */ }
-      self_type operator+(difference_type n) { /** @todo impelemnt me */ }
-      self_type &operator+=(difference_type n) { /** @todo impelemnt me */ }
-      bool operator==(const_reference_self_type o) { /** @todo impelemnt me */ return false; }
-      bool operator!=(const_reference_self_type o) { return !(*this == o); }
+     self_type &operator++() { /** @todo impelemnt me */ }
+     self_type operator++(int) { /** @todo impelemnt me */ }
+     self_type operator+(difference_type n) { /** @todo impelemnt me */ }
+     self_type &operator+=(difference_type n) { /** @todo impelemnt me */ }
+     bool operator==(const_reference_self_type o) { /** @todo impelemnt me */ return false; }
+     bool operator!=(const_reference_self_type o) { return !(*this == o); }
    };
 
    iterator begin() { /** @todo impelemnt me */ }
