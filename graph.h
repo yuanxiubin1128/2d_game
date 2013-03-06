@@ -29,7 +29,7 @@ private:
     Edge(const Edge& other);
     Edge& operator=(const Edge& other);
 
-    const_pointer m_destination;
+    pointer m_destination;
     float m_weight;
   };
 
@@ -42,7 +42,7 @@ private:
     void removeEdge(const_reference destination, float weight = 0);
     void removeAllEdgesTo(const_reference destination);
 
-    const_pointer m_data;
+    pointer m_data;
     std::vector<Edge> m_edges;
   };
 
@@ -81,35 +81,40 @@ private:
 
 public:
 
-   class iterator : public std::iterator<std::forward_iterator_tag,
-                                         value_type,
-                                         difference_type,
-                                         pointer,
-                                         reference>
-   {
-   public:
-     typedef iterator self_type;
-     typedef iterator& reference_self_type;
-     typedef const iterator& const_reference_self_type;
+  class iterator : public std::iterator<std::forward_iterator_tag,
+                                        value_type,
+                                        difference_type,
+                                        pointer,
+                                        reference>
+  {
+  public:
+    typedef iterator self_type;
+    typedef iterator& reference_self_type;
+    typedef const iterator& const_reference_self_type;
 
-     iterator() { /** @todo impelemnt me */ }
-     ~iterator() { /** @todo impelemnt me */ }
-     iterator(const_reference_self_type o) { /** @todo impelemnt me */ }
-     reference_self_type operator=(const_reference_self_type o) { /** @todo impelemnt me */ }
+    iterator() : m_it() {}
+    iterator(typename std::vector<Vertex>::iterator it) : m_it(it) {}
+    ~iterator() {}
+    iterator(const_reference_self_type o) : m_it(o.m_it) {}
+    reference_self_type operator=(const_reference_self_type o)
+      { if (this != &o) { m_it = o.m_it; } return *this; }
 
-     reference operator*() { /** @todo impelemnt me */ }
-     pointer operator->() { /** @todo impelemnt me */ }
+    reference operator*() { return *((*m_it).m_data); }
+    pointer operator->() { return (*m_it).m_data; }
 
-     self_type &operator++() { /** @todo impelemnt me */ }
-     self_type operator++(int) { /** @todo impelemnt me */ }
-     self_type operator+(difference_type n) { /** @todo impelemnt me */ }
-     self_type &operator+=(difference_type n) { /** @todo impelemnt me */ }
-     bool operator==(const_reference_self_type o) { /** @todo impelemnt me */ return false; }
-     bool operator!=(const_reference_self_type o) { return !(*this == o); }
-   };
+    self_type &operator++() { ++m_it; return *this; }
+    self_type operator++(int) { self_type tmp(*this); ++(*this); return tmp; }
+    self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
+    self_type &operator+=(difference_type n) {  m_it += n; return *this; }
+    bool operator==(const_reference_self_type o) { return m_it == o.m_it; }
+    bool operator!=(const_reference_self_type o) { return !(*this == o); }
 
-   iterator begin() { /** @todo impelemnt me */ }
-   iterator end() { /** @todo impelemnt me */ }
+  private:
+    typename std::vector<Vertex>::iterator m_it;
+  };
+
+   iterator begin() { return iterator(m_vertices.begin()); }
+   iterator end() { return iterator(m_vertices.begin()); }
 
    /// @todo const iterator and cbegin and cend
 };
@@ -119,7 +124,7 @@ public:
 
 template <typename T>
 Graph<T>::Edge::Edge(const_reference destination, float weight)
-  : m_destination(&destination)
+  : m_destination(const_cast<pointer>(&destination))
   , m_weight(weight)
 {
 
@@ -149,7 +154,7 @@ typename Graph<T>::Edge& Graph<T>::Edge::operator=(const Edge& other)
 
 template <typename T>
 Graph<T>::Vertex::Vertex(const_reference data)
-  : m_data(&data)
+  : m_data(const_cast<pointer>(&data))
   , m_edges()
 {
 
@@ -300,7 +305,7 @@ std::vector<typename Graph<T>::pointer> Graph<T>::vertices() const
   std::vector<T*> retval;
   std::for_each(m_vertices.begin(), m_vertices.end(),
                 [&retval](const Vertex& v)
-                { retval.push_back( const_cast<T*>(v.m_data)); });
+                { retval.push_back(v.m_data); });
   return retval;
 }
 
@@ -314,7 +319,7 @@ std::vector<typename Graph<T>::pointer> Graph<T>::neighboursOf(const_reference d
 
   std::for_each((*vertex_it).m_edges.begin(), (*vertex_it).m_edges.end(),
                 [&retval](const Edge& e)
-                { retval.push_back( const_cast<T*>(e.m_destination)); });
+                { retval.push_back(e.m_destination); });
 
   return retval;
 }

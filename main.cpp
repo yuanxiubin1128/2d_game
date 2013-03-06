@@ -55,6 +55,20 @@ int main()
     assert(*(n[0]) == 5);
   }
 
+  int c = 13;
+  int d = 1;
+  g.addVertex(d);
+  g.addVertex(c);
+  int vertices_array[] = {2, 5, 13, 1};
+  std::vector<int> v(vertices_array, vertices_array + sizeof(vertices_array) / sizeof(int) );
+  Graph<int>::iterator g_it;
+  std::vector<int>::iterator v_it;
+  for (g_it = g.begin(), v_it = v.begin();
+       g_it != g.end();
+       g_it++, v_it++)
+    assert(*g_it == *v_it);
+
+
   assert(g.neighboursOf(5).size() == 0);
 
   return 0;
