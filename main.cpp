@@ -71,6 +71,19 @@ int main()
 
   assert(g.neighboursOf(5).size() == 0);
 
+  Graph<int> g2;
+  g.addVertex(1);
+  g.addVertex(2);
+  g.addVertex(3);
+  g.addVertex(4);
+
+  int vertices_array2[] = {1, 2, 3, 4};
+  std::vector<int> v2(vertices_array2, vertices_array2 + sizeof(vertices_array2) / sizeof(int) );
+  for (g_it = g2.begin(), v_it = v2.begin();
+       g_it != g2.end();
+       g_it++, v_it++)
+    assert(*g_it == *v_it);
+
   return 0;
 }
 
