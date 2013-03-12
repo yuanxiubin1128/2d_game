@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <vector>
+#include <list>
 #include <algorithm>
 #include <iterator>
 
@@ -43,7 +44,7 @@ private:
     void removeAllEdgesTo(const_reference destination);
 
     pointer m_data;
-    std::vector<Edge> m_edges;
+    std::list<Edge> m_edges;
   };
 
 
