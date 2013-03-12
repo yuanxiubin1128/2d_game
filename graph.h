@@ -24,11 +24,11 @@ public:
 
 private:
 
-  struct Edge {
+  struct EdgeTo {
 
-    Edge(const_reference destination, float weight = 0);
-    Edge(const Edge& other);
-    Edge& operator=(const Edge& other);
+    EdgeTo(const_reference destination, float weight = 0);
+    EdgeTo(const EdgeTo& other);
+    EdgeTo& operator=(const EdgeTo& other);
 
     pointer m_destination;
     float m_weight;
@@ -44,7 +44,7 @@ private:
     void removeAllEdgesTo(const_reference destination);
 
     pointer m_data;
-    std::list<Edge> m_edges;
+    std::list<EdgeTo> m_edges;
   };
 
 
@@ -124,7 +124,7 @@ public:
 // Edge
 
 template <typename T>
-Graph<T>::Edge::Edge(const_reference destination, float weight)
+Graph<T>::EdgeTo::EdgeTo(const_reference destination, float weight)
   : m_destination(const_cast<pointer>(&destination))
   , m_weight(weight)
 {
@@ -132,7 +132,7 @@ Graph<T>::Edge::Edge(const_reference destination, float weight)
 }
 
 template <typename T>
-Graph<T>::Edge::Edge(const Edge& other)
+Graph<T>::EdgeTo::EdgeTo(const EdgeTo& other)
   : m_destination(other.m_destination)
   , m_weight(other.m_weight)
 {
@@ -140,7 +140,7 @@ Graph<T>::Edge::Edge(const Edge& other)
 }
 
 template <typename T>
-typename Graph<T>::Edge& Graph<T>::Edge::operator=(const Edge& other)
+typename Graph<T>::EdgeTo& Graph<T>::EdgeTo::operator=(const EdgeTo& other)
 {
   if (this != &other) {
     m_destination = other.m_destination;
@@ -184,7 +184,7 @@ typename Graph<T>::Vertex& Graph<T>::Vertex::operator=(const Vertex& other)
 template <typename T>
 void Graph<T>::Vertex::addEdge(const_reference destination, float weight)
 {
-  Edge e(destination, weight);
+  EdgeTo e(destination, weight);
   m_edges.push_back(e);
 }
 
@@ -192,7 +192,7 @@ template <typename T>
 void Graph<T>::Vertex::removeEdge(const_reference destination, float weight)
 {
   m_edges.erase(std::find_if(m_edges.begin(), m_edges.end(),
-                             [&destination, &weight](const Edge& e)
+                             [&destination, &weight](const EdgeTo& e)
                              { return e.m_destination == destination &&
                                       e.m_weight == weight;}));
 }
@@ -201,7 +201,7 @@ template <typename T>
 void Graph<T>::Vertex::removeAllEdgesTo(const_reference destination)
 {
   std::remove_if(m_edges.begin(), m_edges.end(),
-                 [&destination](const Edge& e)
+                 [&destination](const EdgeTo& e)
                  { return e.m_destination == destination; });
 }
 
@@ -319,7 +319,7 @@ std::vector<typename Graph<T>::pointer> Graph<T>::neighboursOf(const_reference d
     return retval;
 
   std::for_each((*vertex_it).m_edges.begin(), (*vertex_it).m_edges.end(),
-                [&retval](const Edge& e)
+                [&retval](const EdgeTo& e)
                 { retval.push_back(e.m_destination); });
 
   return retval;
@@ -334,7 +334,7 @@ std::vector<float> Graph<T>::edgesBetween(const_reference source, const_referenc
     return retval;
 
   std::for_each((*vertex_it).m_edges.begin(), (*vertex_it).m_edges.end(),
-                [&retval, &destination](const Edge& e)
+                [&retval, &destination](const EdgeTo& e)
                 { if (*(e.m_destination) == destination)
                     retval.push_back(e.m_weight); });
 
