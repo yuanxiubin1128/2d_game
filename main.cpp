@@ -61,7 +61,7 @@ int main()
   g.addVertex(c);
   int vertices_array[] = {2, 5, 13, 1};
   std::vector<int> v(vertices_array, vertices_array + sizeof(vertices_array) / sizeof(int) );
-  Graph<int>::iterator g_it;
+  Graph<int>::vertex_iterator g_it;
   std::vector<int>::iterator v_it;
   for (g_it = g.begin(), v_it = v.begin();
        g_it != g.end();

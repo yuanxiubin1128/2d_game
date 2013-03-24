@@ -66,21 +66,21 @@ public:
   std::vector<Edge> edges() const;
 
   // iterators
-  class iterator : public std::iterator<std::forward_iterator_tag,
+  class vertex_iterator : public std::iterator<std::forward_iterator_tag,
                                         value_type,
                                         difference_type,
                                         pointer,
                                         reference>
   {
   public:
-    typedef iterator self_type;
-    typedef iterator& reference_self_type;
-    typedef const iterator& const_reference_self_type;
+    typedef vertex_iterator self_type;
+    typedef vertex_iterator& reference_self_type;
+    typedef const vertex_iterator& const_reference_self_type;
 
-    iterator() : m_it() {}
-    iterator(typename std::vector<Vertex>::iterator it) : m_it(it) {}
-    ~iterator() {}
-    iterator(const_reference_self_type o) : m_it(o.m_it) {}
+    vertex_iterator() : m_it() {}
+    vertex_iterator(typename std::vector<Vertex>::iterator it) : m_it(it) {}
+    ~vertex_iterator() {}
+    vertex_iterator(const_reference_self_type o) : m_it(o.m_it) {}
     reference_self_type operator=(const_reference_self_type o)
       { if (this != &o) { m_it = o.m_it; } return *this; }
 
@@ -98,8 +98,8 @@ public:
     typename std::vector<Vertex>::iterator m_it;
   };
 
-  iterator begin() { return iterator(m_vertices.begin()); }
-  iterator end() { return iterator(m_vertices.begin()); }
+  vertex_iterator begin() { return vertex_iterator(m_vertices.begin()); }
+  vertex_iterator end() { return vertex_iterator(m_vertices.begin()); }
 
 
 private:
