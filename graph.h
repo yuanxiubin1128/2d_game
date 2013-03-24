@@ -6,11 +6,15 @@
 #include <algorithm>
 #include <iterator>
 
+
 // directed, weighted
 /// @todo weight type as param too?
 
 template <typename T>
 class Graph {
+
+private:
+  class Vertex;
 
 public:
 
@@ -22,33 +26,23 @@ public:
   typedef const T& const_reference;
   typedef std::ptrdiff_t difference_type;
 
-private:
+  class Edge {
+  public:
+	  Edge() : m_source(0), m_destination(0), m_weight(0) {}
 
-  struct EdgeTo {
+    Edge(pointer source, pointer destination, float weight) :
+      m_source(source), m_destination(destination), m_weight(weight) {}
 
-    EdgeTo(const_reference destination, float weight = 0);
-    EdgeTo(const EdgeTo& other);
-    EdgeTo& operator=(const EdgeTo& other);
+    pointer getSource() const { return m_source; }
+    pointer getDestination() const { return m_destination; }
+    float getWeight() const { return m_weight; }
 
+  private:
+    pointer m_source;
     pointer m_destination;
     float m_weight;
   };
 
-  struct Vertex {
-
-    Vertex(const_reference data);
-    Vertex(const Vertex& other);
-    Vertex& operator=(const Vertex& other);
-    void addEdge(const_reference destination, float weight = 0);
-    void removeEdge(const_reference destination, float weight = 0);
-    void removeAllEdgesTo(const_reference destination);
-
-    pointer m_data;
-    std::list<EdgeTo> m_edges;
-  };
-
-
-public:
 
   Graph();
 
@@ -69,19 +63,9 @@ public:
   std::vector<pointer> vertices() const;
   std::vector<pointer> neighboursOf(const_reference data) const;
   std::vector<float> edgesBetween(const_reference source, const_reference destination) const;
+  std::vector<Edge> edges() const;
 
-private:
-
-  Graph<T>(const Graph<T>& o) {  /** @todo impelemnt me */ }
-  Graph<T>& operator=(const Graph<T>& o) { /** @todo impelemnt me */ }
-
-  typename std::vector<Vertex >::const_iterator find(const_reference data) const;
-  typename std::vector<Vertex >::iterator find(const_reference data);
-
-  std::vector<Vertex> m_vertices;
-
-public:
-
+  // iterators
   class iterator : public std::iterator<std::forward_iterator_tag,
                                         value_type,
                                         difference_type,
@@ -114,10 +98,43 @@ public:
     typename std::vector<Vertex>::iterator m_it;
   };
 
-   iterator begin() { return iterator(m_vertices.begin()); }
-   iterator end() { return iterator(m_vertices.begin()); }
+  iterator begin() { return iterator(m_vertices.begin()); }
+  iterator end() { return iterator(m_vertices.begin()); }
 
-   /// @todo const iterator and cbegin and cend
+
+private:
+
+  struct EdgeTo {
+
+    EdgeTo(const_reference destination, float weight = 0);
+    EdgeTo(const EdgeTo& other);
+    EdgeTo& operator=(const EdgeTo& other);
+
+    pointer m_destination;
+    float m_weight;
+  };
+
+  struct Vertex {
+
+    Vertex(const_reference data);
+    Vertex(const Vertex& other);
+    Vertex& operator=(const Vertex& other);
+    void addEdge(const_reference destination, float weight = 0);
+    void removeEdge(const_reference destination, float weight = 0);
+    void removeAllEdgesTo(const_reference destination);
+    std::vector<Edge> edges() const;
+
+    pointer m_data;
+    std::list<EdgeTo> m_edges;
+  };
+
+  Graph<T>(const Graph<T>& o) {  /** @todo impelemnt me */ }
+  Graph<T>& operator=(const Graph<T>& o) { /** @todo impelemnt me */ }
+
+  typename std::vector<Vertex >::const_iterator find(const_reference data) const;
+  typename std::vector<Vertex >::iterator find(const_reference data);
+
+  std::vector<Vertex> m_vertices;
 };
 
 
@@ -204,6 +221,19 @@ void Graph<T>::Vertex::removeAllEdgesTo(const_reference destination)
                  [&destination](const EdgeTo& e)
                  { return e.m_destination == destination; });
 }
+
+template <typename T>
+std::vector<typename Graph<T>::Edge> Graph<T>::Vertex::edges() const
+{
+  std::vector<Graph<T>::Edge> retval;
+
+  std::for_each(m_edges.begin(), m_edges.end(),
+                 [&retval, this](const EdgeTo& e)
+                 { retval.push_back(Edge(this->m_data, e.m_destination, e.m_weight)); });
+
+  return retval;
+}
+
 
 
 // Graph
@@ -337,6 +367,20 @@ std::vector<float> Graph<T>::edgesBetween(const_reference source, const_referenc
                 [&retval, &destination](const EdgeTo& e)
                 { if (*(e.m_destination) == destination)
                     retval.push_back(e.m_weight); });
+
+  return retval;
+}
+
+template <typename T>
+std::vector<typename Graph<T>::Edge> Graph<T>::edges() const
+{
+  std::vector<typename Graph<T>::Edge> retval;
+
+  std::for_each(m_vertices.begin(), m_vertices.end(),
+                [&retval](const Vertex& v)
+                { const std::vector<Edge> e = v.edges();
+                  retval.insert(retval.end(), e.begin(), e.end());
+                });
 
   return retval;
 }

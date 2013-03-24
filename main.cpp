@@ -84,6 +84,13 @@ int main()
        g_it++, v_it++)
     assert(*g_it == *v_it);
 
+
+  assert(g.addEdge(b, c) == true);
+  assert(g.addEdge(a, d) == true);
+  std::vector<Graph<int>::Edge> e = g.edges();
+
+  assert(e.size() == 3);
+
   return 0;
 }
 
