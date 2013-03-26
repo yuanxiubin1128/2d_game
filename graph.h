@@ -128,18 +128,28 @@ public:
     reference_self_type operator=(const_reference_self_type o)
       { if (this != &o) { m_vertex_it = o.m_vertex_it; m_edge_it = o.m_edge_it; } return *this; }
 
-    edge_reference operator*() { if (!m_edge) { m_edge = new Edge(*m_vertex_it, (*m_edge_it).m_destination, (*m_edge_it).m_weight); } return *m_edge; }
-    edge_pointer operator->() { if (!m_edge) { m_edge = new Edge(*m_vertex_it, (*m_edge_it).m_destination, (*m_edge_it).m_weight); } return m_edge; }
+    edge_reference operator*() { if (!m_edge) { initEdge(); } return *m_edge; }
+    edge_pointer operator->() { if (!m_edge) { initEdge(); } return m_edge; }
 
-    /// @todo implement: delete m_edge & step;
-//     self_type &operator++() { ++m_it; return *this; }
-//     self_type operator++(int) { self_type tmp(*this); ++(*this); return tmp; }
-//     self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
-//     self_type &operator+=(difference_type n) {  m_it += n; return *this; }
-    bool operator==(const_reference_self_type o) { return m_vertex_it == o.m_vertex_it && m_edge_it == o.m_edge_it; }
+    self_type &operator++() { advance(1); return *this; }
+    self_type operator++(int) { self_type tmp(*this); advance(1); return tmp; }
+    self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
+    self_type &operator+=(difference_type n) {  advance(n); return *this; }
+    bool operator==(const_reference_self_type o)
+      { return m_vertex_it == o.m_vertex_it && m_edge_it == o.m_edge_it; }
     bool operator!=(const_reference_self_type o) { return !(*this == o); }
 
   private:
+    void initEdge()
+      { m_edge = new Edge(*m_vertex_it, (*m_edge_it).m_destination, (*m_edge_it).m_weight); }
+    void invalidateEdge() { if (m_edge) delete m_edge; }
+
+    void advance(int n)
+    {
+      invalidateEdge();
+      /// @todo Do the stepping
+    }
+
     typename std::vector<Vertex>::iterator m_vertex_it;
     typename std::list<EdgeTo>::iterator m_edge_it;
     edge_pointer m_edge;
