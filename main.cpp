@@ -63,8 +63,8 @@ int main()
   std::vector<int> v(vertices_array, vertices_array + sizeof(vertices_array) / sizeof(int) );
   Graph<int>::vertex_iterator g_it;
   std::vector<int>::iterator v_it;
-  for (g_it = g.begin(), v_it = v.begin();
-       g_it != g.end();
+  for (g_it = g.vertex_begin(), v_it = v.begin();
+       g_it != g.vertex_end();
        g_it++, v_it++)
     assert(*g_it == *v_it);
 
@@ -79,8 +79,8 @@ int main()
 
   int vertices_array2[] = {1, 2, 3, 4};
   std::vector<int> v2(vertices_array2, vertices_array2 + sizeof(vertices_array2) / sizeof(int) );
-  for (g_it = g2.begin(), v_it = v2.begin();
-       g_it != g2.end();
+  for (g_it = g2.vertex_begin(), v_it = v2.begin();
+       g_it != g2.vertex_end();
        g_it++, v_it++)
     assert(*g_it == *v_it);
 

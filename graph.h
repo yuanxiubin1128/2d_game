@@ -15,6 +15,7 @@ class Graph {
 
 private:
   class Vertex;
+  class EdgeTo;
 
 public:
 
@@ -28,7 +29,7 @@ public:
 
   class Edge {
   public:
-	  Edge() : m_source(0), m_destination(0), m_weight(0) {}
+    Edge() : m_source(0), m_destination(0), m_weight(0) {}
 
     Edge(pointer source, pointer destination, float weight) :
       m_source(source), m_destination(destination), m_weight(weight) {}
@@ -42,6 +43,8 @@ public:
     pointer m_destination;
     float m_weight;
   };
+  typedef Edge* edge_pointer;
+  typedef Edge& edge_reference;
 
 
   Graph();
@@ -62,15 +65,17 @@ public:
   bool contains(const_reference data) const;
   std::vector<pointer> vertices() const;
   std::vector<pointer> neighboursOf(const_reference data) const;
+
+  /// @todo come up with a more clear name
   std::vector<float> edgesBetween(const_reference source, const_reference destination) const;
   std::vector<Edge> edges() const;
 
   // iterators
   class vertex_iterator : public std::iterator<std::forward_iterator_tag,
-                                        value_type,
-                                        difference_type,
-                                        pointer,
-                                        reference>
+                                               value_type,
+                                               difference_type,
+                                               pointer,
+                                               reference>
   {
   public:
     typedef vertex_iterator self_type;
@@ -98,8 +103,50 @@ public:
     typename std::vector<Vertex>::iterator m_it;
   };
 
-  vertex_iterator begin() { return vertex_iterator(m_vertices.begin()); }
-  vertex_iterator end() { return vertex_iterator(m_vertices.begin()); }
+  vertex_iterator vertex_begin() { return vertex_iterator(m_vertices.begin()); }
+  vertex_iterator vertex_end() { return vertex_iterator(m_vertices.end()); }
+
+  class edge_iterator : public std::iterator<std::forward_iterator_tag,
+                                             Edge,
+                                             difference_type,
+                                             edge_pointer,
+                                             edge_reference>
+  {
+  public:
+    typedef edge_iterator self_type;
+    typedef edge_iterator& reference_self_type;
+    typedef const edge_iterator& const_reference_self_type;
+
+    edge_iterator() : m_vertex_it(), m_edge_it(), m_edge(0) {}
+    edge_iterator(typename std::vector<Vertex>::iterator vertex_it,
+                  typename std::list<EdgeTo>::iterator edge_it)
+      : m_vertex_it(vertex_it), m_edge_it(edge_it) {}
+    ~edge_iterator() { if (m_edge) delete m_edge; }
+
+    edge_iterator(const_reference_self_type o)
+      : m_vertex_it(o.m_vertex_it), m_edge_it(o.m_edge_it) {}
+    reference_self_type operator=(const_reference_self_type o)
+      { if (this != &o) { m_vertex_it = o.m_vertex_it; m_edge_it = o.m_edge_it; } return *this; }
+
+    edge_reference operator*() { if (!m_edge) { m_edge = new Edge(*m_vertex_it, (*m_edge_it).m_destination, (*m_edge_it).m_weight); } return *m_edge; }
+    edge_pointer operator->() { if (!m_edge) { m_edge = new Edge(*m_vertex_it, (*m_edge_it).m_destination, (*m_edge_it).m_weight); } return m_edge; }
+
+    /// @todo implement: delete m_edge & step;
+//     self_type &operator++() { ++m_it; return *this; }
+//     self_type operator++(int) { self_type tmp(*this); ++(*this); return tmp; }
+//     self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
+//     self_type &operator+=(difference_type n) {  m_it += n; return *this; }
+    bool operator==(const_reference_self_type o) { return m_vertex_it == o.m_vertex_it && m_edge_it == o.m_edge_it; }
+    bool operator!=(const_reference_self_type o) { return !(*this == o); }
+
+  private:
+    typename std::vector<Vertex>::iterator m_vertex_it;
+    typename std::list<EdgeTo>::iterator m_edge_it;
+    edge_pointer m_edge;
+  };
+
+  edge_iterator edge_begin() { return edge_iterator(m_vertices.begin()); }
+  edge_iterator edge_end() { return edge_iterator(m_vertices.end()); }
 
 
 private:
