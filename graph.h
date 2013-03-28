@@ -77,13 +77,14 @@ public:
                                                pointer,
                                                reference>
   {
+  friend class Graph;
+
   public:
     typedef vertex_iterator self_type;
     typedef vertex_iterator& reference_self_type;
     typedef const vertex_iterator& const_reference_self_type;
 
     vertex_iterator() : m_it() {}
-    vertex_iterator(typename std::vector<Vertex>::iterator it) : m_it(it) {}
     ~vertex_iterator() {}
     vertex_iterator(const_reference_self_type o) : m_it(o.m_it) {}
     reference_self_type operator=(const_reference_self_type o)
@@ -100,6 +101,8 @@ public:
     bool operator!=(const_reference_self_type o) { return !(*this == o); }
 
   private:
+    vertex_iterator(typename std::vector<Vertex>::iterator it) : m_it(it) {}
+
     typename std::vector<Vertex>::iterator m_it;
   };
 
@@ -112,24 +115,22 @@ public:
                                              edge_pointer,
                                              edge_reference>
   {
+  friend class Graph;
+
   public:
     typedef edge_iterator self_type;
     typedef edge_iterator& reference_self_type;
     typedef const edge_iterator& const_reference_self_type;
 
-    edge_iterator() : m_vertex_it(), m_edge_it(), m_edge(0) {}
-    edge_iterator(typename std::vector<Vertex>::iterator vertex_it,
-                  typename std::list<EdgeTo>::iterator edge_it)
-      : m_vertex_it(vertex_it), m_edge_it(edge_it) {}
+    edge_iterator() : m_vertices(),  m_vertex_it(), m_edge_it(), m_edge(0) {}
     ~edge_iterator() { if (m_edge) delete m_edge; }
 
     edge_iterator(const_reference_self_type o)
-      : m_vertex_it(o.m_vertex_it), m_edge_it(o.m_edge_it) {}
-    reference_self_type operator=(const_reference_self_type o)
-      { if (this != &o) { m_vertex_it = o.m_vertex_it; m_edge_it = o.m_edge_it; } return *this; }
+      : m_vertices(o.m_vertices), m_vertex_it(o.m_vertex_it), m_edge_it(o.m_edge_it), m_edge(0) {}
+    reference_self_type operator=(const_reference_self_type o);
 
-    edge_reference operator*() { if (!m_edge) { initEdge(); } return *m_edge; }
-    edge_pointer operator->() { if (!m_edge) { initEdge(); } return m_edge; }
+    edge_reference operator*() { resetEdge(); return *m_edge; }
+    edge_pointer operator->() { resetEdge(); return m_edge; }
 
     self_type &operator++() { advance(1); return *this; }
     self_type operator++(int) { self_type tmp(*this); advance(1); return tmp; }
@@ -140,23 +141,20 @@ public:
     bool operator!=(const_reference_self_type o) { return !(*this == o); }
 
   private:
-    void initEdge()
-      { m_edge = new Edge(*m_vertex_it, (*m_edge_it).m_destination, (*m_edge_it).m_weight); }
-    void invalidateEdge() { if (m_edge) delete m_edge; }
+      edge_iterator(std::vector<Vertex> vertices)
+      : m_vertices(vertices), m_vertex_it(m_vertices.begin()), m_edge_it(), m_edge(0) {}
 
-    void advance(int n)
-    {
-      invalidateEdge();
-      /// @todo Do the stepping
-    }
+    void resetEdge();
+    void advance(int n);
 
+    std::vector<Vertex> m_vertices;
     typename std::vector<Vertex>::iterator m_vertex_it;
     typename std::list<EdgeTo>::iterator m_edge_it;
     edge_pointer m_edge;
   };
 
-  edge_iterator edge_begin() { return edge_iterator(m_vertices.begin()); }
-  edge_iterator edge_end() { return edge_iterator(m_vertices.end()); }
+  edge_iterator edge_begin() { return edge_iterator(m_vertices); }
+  edge_iterator edge_end() { return edge_iterator(m_vertices); }
 
 
 private:
@@ -195,7 +193,62 @@ private:
 };
 
 
-// Edge
+// edge iterator
+
+template <typename T>
+typename Graph<T>::edge_iterator::reference_self_type
+Graph<T>::edge_iterator::operator=(const_reference_self_type o)
+{
+  if (this != &o) {
+    m_vertices = o.m_vertices;
+    m_vertex_it = o.m_vertex_it;
+    m_edge_it = o.m_edge_it;
+  }
+
+  return *this;
+}
+
+
+template <typename T>
+void Graph<T>::edge_iterator::resetEdge()
+{
+  if (m_edge) delete m_edge;
+
+  if (m_vertex_it == m_vertices.end()) {
+    m_edge = 0;
+  } else {
+    m_edge = new Edge( (*m_vertex_it).m_data, (*m_edge_it).m_destination, (*m_edge_it).m_weight);
+  }
+}
+
+template <typename T>
+void Graph<T>::edge_iterator::advance(int n)
+{
+  if (m_vertex_it == m_vertices.end())
+    return;
+
+  std::list<Graph<T>::EdgeTo> edges = (*m_vertex_it).m_edges;
+  const int remaining = std::distance(m_edge_it, edges.end());
+  if (remaining < n) {
+    std::advance(m_edge_it, n);
+    return;
+  }
+
+  int counter = n - remaining;
+  ++m_vertex_it;
+  while (counter > 0 && m_vertex_it != m_vertices.end()) {
+    const int number_of_edges = (*m_vertex_it).m_edges.size();
+    if (counter < number_of_edges) {
+      m_edge_it = (*m_vertex_it).m_edges.begin();
+      std::advance(m_edge_it, counter);
+      return;
+    }
+    counter -= number_of_edges;
+    ++m_vertex_it;
+  }
+}
+
+// EdgeTo
 
 template <typename T>
 Graph<T>::EdgeTo::EdgeTo(const_reference destination, float weight)

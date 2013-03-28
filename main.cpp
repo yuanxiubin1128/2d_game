@@ -91,6 +91,12 @@ int main()
 
   assert(e.size() == 3);
 
+  for(Graph<int>::edge_iterator edge_it = g.edge_begin(); edge_it != g.edge_end(); ++edge_it) {
+    std::cout << (*edge_it).getSource() << " "
+              << (*edge_it).getDestination() << " "
+              << (*edge_it).getWeight() << std::endl;
+  }
+
   return 0;
 }
 
