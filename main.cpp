@@ -57,46 +57,62 @@ int main()
 
   int c = 13;
   int d = 1;
-  g.addVertex(d);
+  assert(g.numberOfVertices() == 2);
   g.addVertex(c);
+  g.addVertex(d);
+  assert(g.numberOfVertices() == 4);
   int vertices_array[] = {2, 5, 13, 1};
   std::vector<int> v(vertices_array, vertices_array + sizeof(vertices_array) / sizeof(int) );
   Graph<int>::vertex_iterator g_it;
   std::vector<int>::iterator v_it;
+
   for (g_it = g.vertex_begin(), v_it = v.begin();
        g_it != g.vertex_end();
-       g_it++, v_it++)
-    assert(*g_it == *v_it);
+       g_it++, v_it++) {
+    assert(**g_it == *v_it);
+  }
 
 
   assert(g.neighboursOf(5).size() == 0);
 
   Graph<int> g2;
-  g.addVertex(1);
-  g.addVertex(2);
-  g.addVertex(3);
-  g.addVertex(4);
+  g2.addVertex(1);
+  g2.addVertex(2);
+  g2.addVertex(3);
+  g2.addVertex(4);
 
   int vertices_array2[] = {1, 2, 3, 4};
   std::vector<int> v2(vertices_array2, vertices_array2 + sizeof(vertices_array2) / sizeof(int) );
   for (g_it = g2.vertex_begin(), v_it = v2.begin();
        g_it != g2.vertex_end();
-       g_it++, v_it++)
-    assert(*g_it == *v_it);
+       g_it++, v_it++) {
+    std::cout << "vector: "
+              << *g_it << " "
+              << **g_it
+              << std::endl;
+    assert(**g_it == *v_it);
+  }
 
 
-  assert(g.addEdge(b, c) == true);
-  assert(g.addEdge(a, d) == true);
-  std::vector<Graph<int>::Edge> e = g.edges();
+  assert(g2.addEdge(1, 2) == true);
+  assert(g2.addEdge(1, 3) == true);
+  assert(g2.addEdge(2, 4) == true);
+  std::vector<Graph<int>::Edge> e = g2.edges();
 
   assert(e.size() == 3);
 
-  for(Graph<int>::edge_iterator edge_it = g.edge_begin(); edge_it != g.edge_end(); ++edge_it) {
-    std::cout << (*edge_it).getSource() << " "
-              << (*edge_it).getDestination() << " "
+  for(Graph<int>::edge_iterator edge_it = g2.edge_begin();
+      edge_it != g2.edge_end();
+      ++edge_it) {
+    Graph<int>::pointer source = (*edge_it).getSource();
+    Graph<int>::pointer destination = (*edge_it).getDestination();
+    std::cout << "edge: "
+              << source << " " << *source << " "
+              << destination << " " << *destination << " "
               << (*edge_it).getWeight() << std::endl;
   }
 
+  std::cout << "frankon vege" << std::endl;
   return 0;
 }
 
