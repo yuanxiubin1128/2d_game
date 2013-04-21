@@ -97,8 +97,8 @@ public:
     self_type operator++(int) { self_type tmp(*this); ++(*this); return tmp; }
     self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
     self_type &operator+=(difference_type n) {  m_it += n; return *this; }
-    bool operator==(const_reference_self_type o) { return m_it == o.m_it; }
-    bool operator!=(const_reference_self_type o) { return !(*this == o); }
+    bool operator==(const_reference_self_type o) const { return m_it == o.m_it; }
+    bool operator!=(const_reference_self_type o) const { return !(*this == o); }
 
   private:
     vertex_iterator(typename std::vector<Vertex>::iterator it) : m_it(it) {}
@@ -127,7 +127,8 @@ public:
 
     edge_iterator(const_reference_self_type o)
       : m_vertices(o.m_vertices), m_vertex_it(o.m_vertex_it), m_edge_it(o.m_edge_it), m_edge(0) {}
-    reference_self_type operator=(const_reference_self_type o);
+
+    reference_self_type operator=(self_type o);
 
     edge_reference operator*() { resetEdge(); return *m_edge; }
     edge_pointer operator->() { resetEdge(); return m_edge; }
@@ -136,17 +137,31 @@ public:
     self_type operator++(int) { self_type tmp(*this); advance(1); return tmp; }
     self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
     self_type &operator+=(difference_type n) {  advance(n); return *this; }
-    bool operator==(const_reference_self_type o)
-      { return (m_vertex_it == m_vertices.end() && o.m_vertex_it == o.m_vertices.end()) ||
-        (m_vertex_it == o.m_vertex_it && m_edge_it == o.m_edge_it); }
-    bool operator!=(const_reference_self_type o) { return !(*this == o); }
+    bool operator==(const_reference_self_type o) const
+      {
+        const bool this_is_at_end = m_vertex_it == m_vertices.end();
+        const bool other_is_at_end = o.m_vertex_it == o.m_vertices.end();
+        if ( this_is_at_end && other_is_at_end ) return true;
+        if ( this_is_at_end != other_is_at_end ) return false;
+
+        return *m_vertex_it == *(o.m_vertex_it) &&
+               *m_edge_it == *(o.m_edge_it);
+
+      }
+    bool operator!=(const_reference_self_type o) const { return !(*this == o); }
+
+    void swap(reference_self_type other);
 
   private:
       edge_iterator(std::vector<Vertex> vertices, bool begin = true)
       : m_vertices(vertices), m_vertex_it(), m_edge_it(), m_edge(0) {
         if (begin) {
           m_vertex_it = m_vertices.begin();
-          if (!m_vertices.empty()) m_edge_it = (*m_vertex_it).m_edges.begin();
+          while (m_vertex_it != m_vertices.end() && m_vertices.empty())
+            ++m_vertex_it;
+
+          if (m_vertex_it != m_vertices.end())
+            m_edge_it = (*m_vertex_it).m_edges.begin();
         } else {
           m_vertex_it = m_vertices.end();
         }
@@ -172,6 +187,7 @@ private:
     EdgeTo(const_reference destination, float weight = 0);
     EdgeTo(const EdgeTo& other);
     EdgeTo& operator=(const EdgeTo& other);
+    bool operator==(const EdgeTo& other) const;
 
     pointer m_destination;
     float m_weight;
@@ -182,6 +198,7 @@ private:
     Vertex(const_reference data);
     Vertex(const Vertex& other);
     Vertex& operator=(const Vertex& other);
+    bool operator==(const Vertex& other) const;
     void addEdge(const_reference destination, float weight = 0);
     void removeEdge(const_reference destination, float weight = 0);
     void removeAllEdgesTo(const_reference destination);
@@ -205,15 +222,19 @@ private:
 
 template <typename T>
 typename Graph<T>::edge_iterator::reference_self_type
-Graph<T>::edge_iterator::operator=(const_reference_self_type o)
+Graph<T>::edge_iterator::operator=(self_type o)
 {
-  if (this != &o) {
-    m_vertices = o.m_vertices;
-    m_vertex_it = o.m_vertex_it;
-    m_edge_it = o.m_edge_it;
-  }
-
+  swap(o);
   return *this;
+}
+
+template <typename T>
+void Graph<T>::edge_iterator::swap(reference_self_type other)
+{
+  std::swap(m_vertices, other.m_vertices);
+  std::swap(m_vertex_it, other.m_vertex_it);
+  std::swap(m_edge_it, other.m_edge_it);
+  std::swap(m_edge, other.m_edge);
 }
 
 
@@ -222,8 +243,7 @@ void Graph<T>::edge_iterator::resetEdge()
 {
   if (m_edge) delete m_edge;
 
-  if (m_vertex_it == m_vertices.end() ||
-      (*m_vertex_it).m_edges.empty()) {
+  if (m_vertex_it == m_vertices.end() || (*m_vertex_it).m_edges.empty()) {
     m_edge = 0;
     return;
   }
@@ -235,6 +255,7 @@ void Graph<T>::edge_iterator::resetEdge()
   m_edge = new Edge(source, destination, weight);
 }
 
+/// @todo Rewrite it to be more simple
 template <typename T>
 void Graph<T>::edge_iterator::advance(int n)
 {
@@ -292,6 +313,11 @@ typename Graph<T>::EdgeTo& Graph<T>::EdgeTo::operator=(const EdgeTo& other)
   return *this;
 }
 
+template <typename T>
+bool Graph<T>::EdgeTo::operator==(const EdgeTo& other) const
+{
+  return m_destination == other.m_destination && m_weight == other.m_weight;
+}
 
 // Vertex
 
@@ -316,11 +342,18 @@ typename Graph<T>::Vertex& Graph<T>::Vertex::operator=(const Vertex& other)
 {
   if (this != &other) {
     m_data = other.m_data;
-    m_edges.clear();
     m_edges = other.m_edges;
   }
 
   return *this;
+}
+
+template <typename T>
+bool Graph<T>::Vertex::operator==(const Vertex& other) const
+{
+  return m_data == other.m_data &&
+         m_edges.size() == other.m_edges.size() &&
+         m_edges == other.m_edges;
 }
 
 template <typename T>

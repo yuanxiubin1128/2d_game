@@ -63,12 +63,18 @@ int main()
   assert(g.numberOfVertices() == 4);
   int vertices_array[] = {2, 5, 13, 1};
   std::vector<int> v(vertices_array, vertices_array + sizeof(vertices_array) / sizeof(int) );
-  Graph<int>::vertex_iterator g_it;
-  std::vector<int>::iterator v_it;
+  Graph<int>::vertex_iterator g_it2;
+  std::vector<int>::iterator v_it = v.begin();
+  g_it2 = g.vertex_begin();
+  assert(g_it2 == g.vertex_begin());
 
-  for (g_it = g.vertex_begin(), v_it = v.begin();
+  for (Graph<int>::vertex_iterator g_it = g.vertex_begin();
        g_it != g.vertex_end();
-       g_it++, v_it++) {
+       ++g_it, ++v_it) {
+    std::cout << "victor: "
+//               << *g_it << " "
+              << **g_it
+              << std::endl;
     assert(**g_it == *v_it);
   }
 
@@ -83,11 +89,12 @@ int main()
 
   int vertices_array2[] = {1, 2, 3, 4};
   std::vector<int> v2(vertices_array2, vertices_array2 + sizeof(vertices_array2) / sizeof(int) );
-  for (g_it = g2.vertex_begin(), v_it = v2.begin();
+   v_it = v2.begin();
+  for (Graph<int>::vertex_iterator g_it = g2.vertex_begin();
        g_it != g2.vertex_end();
-       g_it++, v_it++) {
+       ++g_it, ++v_it) {
     std::cout << "vector: "
-              << *g_it << " "
+//               << *g_it << " "
               << **g_it
               << std::endl;
     assert(**g_it == *v_it);
@@ -98,19 +105,52 @@ int main()
   assert(g2.addEdge(1, 3) == true);
   assert(g2.addEdge(2, 4) == true);
   std::vector<Graph<int>::Edge> e = g2.edges();
-
   assert(e.size() == 3);
 
-  for(Graph<int>::edge_iterator edge_it = g2.edge_begin();
-      edge_it != g2.edge_end();
-      ++edge_it) {
+  Graph<int>::edge_iterator edge_it;
+  Graph<int>::edge_iterator beee = g2.edge_begin();
+  edge_it = beee;
+  assert(edge_it == g2.edge_begin());
+    Graph<int>::pointer source = (*edge_it).getSource();
+    Graph<int>::pointer destination = (*edge_it).getDestination();
+    assert (*source == 1);
+    assert (*destination == 2);
+
+    ++edge_it;
+    source = (*edge_it).getSource();
+    destination = (*edge_it).getDestination();
+    assert (*source == 1);
+    assert (*destination == 3);
+
+     ++edge_it;
+    source = (*edge_it).getSource();
+    destination = (*edge_it).getDestination();
+    assert (*source == 2);
+    assert (*destination == 4);
+
+  int aasdads = 23;
+//   Graph<int>::edge_iterator edge_it;
+
+  for(/*Graph<int>::edge_iterator*/ edge_it = g2.edge_begin(); edge_it != g2.edge_end(); ++edge_it) {
     Graph<int>::pointer source = (*edge_it).getSource();
     Graph<int>::pointer destination = (*edge_it).getDestination();
     std::cout << "edge: "
-              << source << " " << *source << " "
-              << destination << " " << *destination << " "
+//               << source << " "
+              << *source << " "
+//               << destination << " "
+              << *destination << " "
               << (*edge_it).getWeight() << std::endl;
   }
+
+  Graph<int>::edge_iterator edge_it1 = g2.edge_begin();
+  edge_it1 += 10;
+  assert(edge_it1 == g2.edge_end());
+
+  Graph<int>::edge_iterator edge_it2 = g2.edge_begin();
+  edge_it2 += 2;
+  assert(*((*edge_it2).getSource()) == 2);
+  assert(*((*edge_it2).getDestination()) == 4);
+  assert((*edge_it2).getWeight() == 0);
 
   std::cout << "frankon vege" << std::endl;
   return 0;
