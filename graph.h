@@ -267,40 +267,31 @@ void Graph<T>::edge_iterator::resetEdge()
 
   if (m_vertex_it == m_vertices.end() || (*m_vertex_it).m_edges.empty()) {
     m_edge = 0;
-    return;
+  } else {
+    m_edge = new Edge((*m_vertex_it).m_data,
+                      (*m_edge_it).m_destination,
+                      (*m_edge_it).m_weight);
   }
-
-  m_edge = new Edge((*m_vertex_it).m_data,
-                    (*m_edge_it).m_destination,
-                    (*m_edge_it).m_weight);
 }
 
-/// @todo Rewrite it to be more simple
 template <typename T>
 void Graph<T>::edge_iterator::advance(int n)
 {
-  if (m_vertex_it == m_vertices.end()) return;
-
-  while (true) {
+  while (n > 0 && m_vertex_it != m_vertices.end()) {
     const int edgesAhead = std::distance(m_edge_it, (*m_vertex_it).m_edges.end()) - 1;
     if (n <= edgesAhead) {
       std::advance(m_edge_it, n);
       return;
     }
 
-    if (edgesAhead > 0)
-      n -= edgesAhead;
+    if (edgesAhead > 0) n -= edgesAhead;
 
     ++m_vertex_it;
-
-    if (m_vertex_it == m_vertices.end())
-      return;
-
-    m_edge_it = (*m_vertex_it).m_edges.begin();
-    if (m_edge_it != (*m_vertex_it).m_edges.end())
-      --n;
-
-    if (n == 0) return;
+    if (m_vertex_it != m_vertices.end()) {
+      m_edge_it = (*m_vertex_it).m_edges.begin();
+      if (m_edge_it != (*m_vertex_it).m_edges.end())
+        --n;
+    }
   }
 }
 
