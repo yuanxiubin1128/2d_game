@@ -73,9 +73,9 @@ int main()
        ++g_it, ++v_it) {
     std::cout << "victor: "
 //               << *g_it << " "
-              << **g_it
+              << *g_it
               << std::endl;
-    assert(**g_it == *v_it);
+    assert(*g_it == *v_it);
   }
 
 
@@ -94,10 +94,9 @@ int main()
        g_it != g2.vertex_end();
        ++g_it, ++v_it) {
     std::cout << "vector: "
-//               << *g_it << " "
-              << **g_it
+              << *g_it
               << std::endl;
-    assert(**g_it == *v_it);
+    assert(*g_it == *v_it);
   }
 
 
@@ -135,9 +134,7 @@ int main()
     Graph<int>::pointer source = (*edge_it).getSource();
     Graph<int>::pointer destination = (*edge_it).getDestination();
     std::cout << "edge: "
-//               << source << " "
               << *source << " "
-//               << destination << " "
               << *destination << " "
               << (*edge_it).getWeight() << std::endl;
   }
