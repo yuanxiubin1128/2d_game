@@ -49,6 +49,10 @@ public:
 
 
   Graph() : m_vertices() {}
+  Graph<T>(const Graph<T>& o) : m_vertices(o.m_vertices) {}
+  Graph<T>& operator=(Graph<T> o) { swap(o); return *this; }
+  void swap(Graph& o) { std::swap(m_vertices, o.m_vertices); }
+
 
   //  Capacity
   bool empty() const  { return m_vertices.empty(); }
@@ -129,7 +133,7 @@ public:
     void swap(reference_self_type other);
 
     edge_reference operator*() { resetEdge(); return m_edge; }
-    edge_pointer operator->() { resetEdge(); return m_edge; }
+    edge_pointer operator->() { resetEdge(); return &m_edge; }
     self_type &operator++() { advance(1); return *this; }
     self_type operator++(int) { self_type tmp(*this); advance(1); return tmp; }
     self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
@@ -185,9 +189,6 @@ private:
     pointer m_data;
     std::list<EdgeTo> m_edges;
   };
-
-  Graph<T>(const Graph<T>& o) {  /** @todo impelemnt me */ }
-  Graph<T>& operator=(const Graph<T>& o) { /** @todo impelemnt me */ }
 
   typename std::vector<Vertex >::const_iterator find(const_reference data) const;
   typename std::vector<Vertex >::iterator find(const_reference data);
