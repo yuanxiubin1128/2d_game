@@ -2,7 +2,7 @@
 #include <cassert>
 
 
-#include "graph.h"
+#include "graph.hpp"
 
 int main()
 {
