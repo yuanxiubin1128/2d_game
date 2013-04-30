@@ -200,21 +200,21 @@ private:
 // Edge
 
 template <typename T>
-Graph<T>::Edge::Edge(pointer source, pointer destination, float weight)
+inline Graph<T>::Edge::Edge(pointer source, pointer destination, float weight)
   : m_source(source)
   , m_destination(destination)
   , m_weight(weight)
 {}
 
 template <typename T>
- Graph<T>::Edge::Edge(const Edge& o)
+inline Graph<T>::Edge::Edge(const Edge& o)
   : m_source(o.m_source)
   , m_destination(o.m_destination)
   , m_weight(o.m_weight)
 {}
 
 template <typename T>
-void Graph<T>::Edge::swap(Edge& o)
+inline void Graph<T>::Edge::swap(Edge& o)
 {
   std::swap(m_source, o.m_source);
   std::swap(m_destination, o.m_destination);
@@ -225,7 +225,7 @@ void Graph<T>::Edge::swap(Edge& o)
 // edge iterator
 
 template <typename T>
-Graph<T>::edge_iterator::edge_iterator(const_reference_self_type o)
+inline Graph<T>::edge_iterator::edge_iterator(const_reference_self_type o)
   : m_vertices(o.m_vertices)
   , m_vertex_it(o.m_vertex_it)
   , m_edge_it(o.m_edge_it)
@@ -245,7 +245,7 @@ bool Graph<T>::edge_iterator::operator==(const_reference_self_type o) const
 }
 
 template <typename T>
-void Graph<T>::edge_iterator::swap(reference_self_type other)
+inline void Graph<T>::edge_iterator::swap(reference_self_type other)
 {
   std::swap(m_vertices, other.m_vertices);
   std::swap(m_vertex_it, other.m_vertex_it);
@@ -254,7 +254,7 @@ void Graph<T>::edge_iterator::swap(reference_self_type other)
 }
 
 template <typename T>
-Graph<T>::edge_iterator::edge_iterator(std::vector<Vertex> vertices, bool begin)
+inline Graph<T>::edge_iterator::edge_iterator(std::vector<Vertex> vertices, bool begin)
   : m_vertices(vertices), m_vertex_it(), m_edge_it(), m_edge()
 {
   if (begin) {
@@ -270,7 +270,7 @@ Graph<T>::edge_iterator::edge_iterator(std::vector<Vertex> vertices, bool begin)
 }
 
 template <typename T>
-void Graph<T>::edge_iterator::resetEdge()
+inline void Graph<T>::edge_iterator::resetEdge()
 {
   if (m_vertex_it == m_vertices.end() || (*m_vertex_it).m_edges.empty()) {
     m_edge = Edge();
@@ -303,20 +303,20 @@ void Graph<T>::edge_iterator::advance(int n)
 // EdgeTo
 
 template <typename T>
-Graph<T>::EdgeTo::EdgeTo(const_reference destination, float weight)
+inline Graph<T>::EdgeTo::EdgeTo(const_reference destination, float weight)
   : m_destination(const_cast<pointer>(&destination))
   , m_weight(weight)
 {}
 
 template <typename T>
-void Graph<T>::EdgeTo::swap(EdgeTo& o)
+inline void Graph<T>::EdgeTo::swap(EdgeTo& o)
 {
   std::swap(m_destination, o.m_destination);
   std::swap(m_vertices, o.m_weight);
 }
 
 template <typename T>
-bool Graph<T>::EdgeTo::operator==(const EdgeTo& other) const
+inline bool Graph<T>::EdgeTo::operator==(const EdgeTo& other) const
 {
   return m_destination == other.m_destination &&
          m_weight == other.m_weight;
@@ -326,7 +326,7 @@ bool Graph<T>::EdgeTo::operator==(const EdgeTo& other) const
 // Vertex
 
 template <typename T>
-bool Graph<T>::Vertex::operator==(const Vertex& other) const
+inline bool Graph<T>::Vertex::operator==(const Vertex& other) const
 {
   return m_data == other.m_data &&
          m_edges.size() == other.m_edges.size() &&
@@ -334,13 +334,13 @@ bool Graph<T>::Vertex::operator==(const Vertex& other) const
 }
 
 template <typename T>
-void Graph<T>::Vertex::addEdge(const_reference destination, float weight)
+inline void Graph<T>::Vertex::addEdge(const_reference destination, float weight)
 {
   m_edges.push_back(EdgeTo(destination, weight));
 }
 
 template <typename T>
-void Graph<T>::Vertex::removeEdge(const_reference destination, float weight)
+inline void Graph<T>::Vertex::removeEdge(const_reference destination, float weight)
 {
   m_edges.erase(std::find_if(m_edges.begin(), m_edges.end(),
                              [&destination, &weight](const EdgeTo& e)
@@ -349,7 +349,7 @@ void Graph<T>::Vertex::removeEdge(const_reference destination, float weight)
 }
 
 template <typename T>
-void Graph<T>::Vertex::removeAllEdgesTo(const_reference destination)
+inline void Graph<T>::Vertex::removeAllEdgesTo(const_reference destination)
 {
   std::remove_if(m_edges.begin(), m_edges.end(),
                  [&destination](const EdgeTo& e)
@@ -357,7 +357,7 @@ void Graph<T>::Vertex::removeAllEdgesTo(const_reference destination)
 }
 
 template <typename T>
-std::vector<typename Graph<T>::Edge> Graph<T>::Vertex::edges() const
+inline std::vector<typename Graph<T>::Edge> Graph<T>::Vertex::edges() const
 {
   std::vector<Graph<T>::Edge> retval;
 
@@ -372,15 +372,15 @@ std::vector<typename Graph<T>::Edge> Graph<T>::Vertex::edges() const
 // Graph
 
 template <typename T>
-typename Graph<T>::size_type Graph<T>::numberOfEdges() const
+inline typename Graph<T>::size_type Graph<T>::numberOfEdges() const
 {
   return std::accumulate(m_vertices.begin(), m_vertices.end(), 0,
-                  [](int sum, const Vertex& v)
-                  { return sum + v.m_edges.size(); });
+                         [](int sum, const Vertex& v)
+                         { return sum + v.m_edges.size(); });
 }
 
 template <typename T>
-bool Graph<T>::addVertex(const_reference data)
+inline bool Graph<T>::addVertex(const_reference data)
 {
   if (find(data) != m_vertices.end())
     return false;
@@ -390,7 +390,7 @@ bool Graph<T>::addVertex(const_reference data)
 }
 
 template <typename T>
-bool Graph<T>::removeVertex(const_reference data)
+inline bool Graph<T>::removeVertex(const_reference data)
 {
   typename std::vector<Vertex>::iterator it = find(data);
   if (it == m_vertices.end())
@@ -416,7 +416,7 @@ bool Graph<T>::addEdge(const_reference source, const_reference destination, floa
 }
 
 template <typename T>
-bool Graph<T>::removeEdge(const_reference source, const_reference destination, float weight)
+inline bool Graph<T>::removeEdge(const_reference source, const_reference destination, float weight)
 {
   typename std::vector<Vertex>::iterator it = find(source);
   if (it == m_vertices.end())
@@ -427,7 +427,7 @@ bool Graph<T>::removeEdge(const_reference source, const_reference destination, f
 }
 
 template <typename T>
-bool Graph<T>::removeAllEdges(const_reference source, const_reference destination)
+inline bool Graph<T>::removeAllEdges(const_reference source, const_reference destination)
 {
   typename std::vector<Vertex>::iterator it = find(source);
   if (it == m_vertices.end())
@@ -438,7 +438,7 @@ bool Graph<T>::removeAllEdges(const_reference source, const_reference destinatio
 }
 
 template <typename T>
-std::vector<typename Graph<T>::pointer> Graph<T>::vertices() const
+inline std::vector<typename Graph<T>::pointer> Graph<T>::vertices() const
 {
   std::vector<T*> retval;
   std::for_each(m_vertices.begin(), m_vertices.end(),
@@ -479,7 +479,7 @@ std::vector<float> Graph<T>::edgesBetween(const_reference source, const_referenc
 }
 
 template <typename T>
-std::vector<typename Graph<T>::Edge> Graph<T>::edges() const
+inline std::vector<typename Graph<T>::Edge> Graph<T>::edges() const
 {
   std::vector<typename Graph<T>::Edge> retval;
 
@@ -494,7 +494,7 @@ std::vector<typename Graph<T>::Edge> Graph<T>::edges() const
 
 
 template <typename T>
-typename std::vector<typename Graph<T>::Vertex >::const_iterator Graph<T>::find(const_reference data) const
+inline typename std::vector<typename Graph<T>::Vertex >::const_iterator Graph<T>::find(const_reference data) const
 {
   return std::find_if(m_vertices.begin(), m_vertices.end(),
                       [&data](const Vertex& v)
@@ -502,7 +502,7 @@ typename std::vector<typename Graph<T>::Vertex >::const_iterator Graph<T>::find(
 }
 
 template <typename T>
-typename std::vector<typename Graph<T>::Vertex >::iterator Graph<T>::find(const_reference data)
+inline typename std::vector<typename Graph<T>::Vertex >::iterator Graph<T>::find(const_reference data)
 {
   return std::find_if(m_vertices.begin(), m_vertices.end(),
                       [&data](const Vertex& v)
