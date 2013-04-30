@@ -95,8 +95,8 @@ public:
     reference_self_type operator=(self_type o) { swap(o); return *this; }
     void swap(reference_self_type o) { std::swap(m_it, o.m_it); }
 
-    reference operator*() { return *((*m_it).m_data); }
-    pointer operator->() { return (*m_it).m_data; }
+    const_reference operator*() { return *((*m_it).m_data); }
+    const_pointer operator->() { return (*m_it).m_data; }
     self_type &operator++() { ++m_it; return *this; }
     self_type operator++(int) { self_type tmp(*this); ++(*this); return tmp; }
     self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
@@ -106,12 +106,15 @@ public:
 
   private:
     vertex_iterator(typename std::vector<Vertex>::iterator it) : m_it(it) {}
+    vertex_iterator(typename std::vector<Vertex>::const_iterator it) : m_it(it) {}
 
-    typename std::vector<Vertex>::iterator m_it;
+    typename std::vector<Vertex>::const_iterator m_it;
   };
 
   vertex_iterator vertex_begin() { return vertex_iterator(m_vertices.begin()); }
+  const vertex_iterator vertex_begin() const { return vertex_iterator(m_vertices.begin()); }
   vertex_iterator vertex_end() { return vertex_iterator(m_vertices.end()); }
+  const vertex_iterator vertex_end() const { return vertex_iterator(m_vertices.end()); }
 
   class edge_iterator : public std::iterator<std::forward_iterator_tag,
                                              Edge,
@@ -132,8 +135,8 @@ public:
     reference_self_type operator=(self_type o) { swap(o); return *this; }
     void swap(reference_self_type other);
 
-    edge_reference operator*() { resetEdge(); return m_edge; }
-    edge_pointer operator->() { resetEdge(); return &m_edge; }
+    const edge_reference operator*() { resetEdge(); return m_edge; }
+    const edge_pointer operator->() { resetEdge(); return &m_edge; }
     self_type &operator++() { advance(1); return *this; }
     self_type operator++(int) { self_type tmp(*this); advance(1); return tmp; }
     self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
@@ -154,7 +157,9 @@ public:
   };
 
   edge_iterator edge_begin() { return edge_iterator(m_vertices); }
+  const edge_iterator edge_begin() const { return edge_iterator(m_vertices); }
   edge_iterator edge_end() { return edge_iterator(m_vertices, false); }
+  const edge_iterator edge_end() const { return edge_iterator(m_vertices, false); }
 
 
 private:
