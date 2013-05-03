@@ -48,11 +48,13 @@ public:
   typedef Edge& edge_reference;
 
 
-  Graph() : m_vertices() {}
-  Graph<T>(const Graph<T>& o) : m_vertices(o.m_vertices) {}
+  Graph(bool isdirected = true) : m_directed(isdirected), m_vertices() {}
+  Graph<T>(const Graph<T>& o) : m_directed(o.m_directed), m_vertices(o.m_vertices) {}
   Graph<T>& operator=(Graph<T> o) { swap(o); return *this; }
-  void swap(Graph& o) { std::swap(m_vertices, o.m_vertices); }
+  void swap(Graph& o) { std::swap (m_directed, o.m_directed); std::swap(m_vertices, o.m_vertices); }
 
+  // Properties
+  bool directed() const { return m_directed; }
 
   //  Capacity
   bool empty() const  { return m_vertices.empty(); }
@@ -95,8 +97,8 @@ public:
     reference_self_type operator=(self_type o) { swap(o); return *this; }
     void swap(reference_self_type o) { std::swap(m_it, o.m_it); }
 
-    const_reference operator*() { return *((*m_it).m_data); }
-    const_pointer operator->() { return (*m_it).m_data; }
+    reference operator*() { return *((*m_it).m_data); }
+    pointer operator->() { return (*m_it).m_data; }
     self_type &operator++() { ++m_it; return *this; }
     self_type operator++(int) { self_type tmp(*this); ++(*this); return tmp; }
     self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
@@ -135,8 +137,8 @@ public:
     reference_self_type operator=(self_type o) { swap(o); return *this; }
     void swap(reference_self_type other);
 
-    const edge_reference operator*() { resetEdge(); return m_edge; }
-    const edge_pointer operator->() { resetEdge(); return &m_edge; }
+    edge_reference operator*() { resetEdge(); return m_edge; }
+    edge_pointer operator->() { resetEdge(); return &m_edge; }
     self_type &operator++() { advance(1); return *this; }
     self_type operator++(int) { self_type tmp(*this); advance(1); return tmp; }
     self_type operator+(difference_type n) { self_type tmp(*this); tmp.pos_ += n; return tmp; }
@@ -198,6 +200,7 @@ private:
   typename std::vector<Vertex >::const_iterator find(const_reference data) const;
   typename std::vector<Vertex >::iterator find(const_reference data);
 
+  bool m_directed;
   std::vector<Vertex> m_vertices;
 };
 
@@ -317,7 +320,7 @@ template <typename T>
 inline void Graph<T>::EdgeTo::swap(EdgeTo& o)
 {
   std::swap(m_destination, o.m_destination);
-  std::swap(m_vertices, o.m_weight);
+  std::swap(m_weight, o.m_weight);
 }
 
 template <typename T>
@@ -358,7 +361,7 @@ inline void Graph<T>::Vertex::removeAllEdgesTo(const_reference destination)
 {
   std::remove_if(m_edges.begin(), m_edges.end(),
                  [&destination](const EdgeTo& e)
-                 { return e.m_destination == destination; });
+                 { return *e.m_destination == destination; });
 }
 
 template <typename T>
@@ -401,6 +404,11 @@ inline bool Graph<T>::removeVertex(const_reference data)
   if (it == m_vertices.end())
     return false;
 
+  std::vector<pointer> neighbours = neighboursOf(data);
+  std::for_each(neighbours.begin(), neighbours.end(),
+                [this, &data] (pointer vertex)
+                { this->removeAllEdges(*vertex, data); } );
+
   m_vertices.erase(it);
   return true;
 }
@@ -417,28 +425,45 @@ bool Graph<T>::addEdge(const_reference source, const_reference destination, floa
     return false;
 
   (*source_it).addEdge(destination, weight);
+  if (!m_directed)
+    (*destination_it).addEdge(source, weight);
+
   return true;
 }
 
 template <typename T>
 inline bool Graph<T>::removeEdge(const_reference source, const_reference destination, float weight)
 {
-  typename std::vector<Vertex>::iterator it = find(source);
-  if (it == m_vertices.end())
+  typename std::vector<Vertex>::iterator source_it = find(source);
+  if (source_it == m_vertices.end())
     return false;
 
-  (*it).removeEdge(destination, weight);
+  typename std::vector<Vertex>::iterator destination_it = find(destination);
+  if (destination_it == m_vertices.end())
+    return false;
+
+  (*source_it).removeEdge(destination, weight);
+  if (!m_directed)
+    (*destination_it).removeEdge(source, weight);
+
   return true;
 }
 
 template <typename T>
 inline bool Graph<T>::removeAllEdges(const_reference source, const_reference destination)
 {
-  typename std::vector<Vertex>::iterator it = find(source);
-  if (it == m_vertices.end())
+  typename std::vector<Vertex>::iterator source_it = find(source);
+  if (source_it == m_vertices.end())
     return false;
 
-  (*it).removeAllEdgesEdge(destination);
+  typename std::vector<Vertex>::iterator destination_it = find(destination);
+  if (destination_it == m_vertices.end())
+    return false;
+
+  (*source_it).removeAllEdgesTo(destination);
+  if (!m_directed)
+    (*destination_it).removeAllEdgesTo(source);
+
   return true;
 }
 
@@ -462,7 +487,7 @@ std::vector<typename Graph<T>::pointer> Graph<T>::neighboursOf(const_reference d
 
   std::for_each((*vertex_it).m_edges.begin(), (*vertex_it).m_edges.end(),
                 [&retval](const EdgeTo& e)
-                { retval.push_back(e.m_destination); });
+                { retval.push_back(e.m_destination); }); /// @todo unique push!
 
   return retval;
 }

@@ -3,6 +3,7 @@
 
 
 #include "graph.hpp"
+// #include "dotConverter.hpp"
 
 int main()
 {
@@ -150,6 +151,16 @@ int main()
   assert((*edge_it2).getWeight() == 0);
 
   std::cout << "frankon vege" << std::endl;
-  return 0;
+
+//   assert(toDot(g2, "itt.dot") == true);
+//   return 0;
+
+
+  Graph<int> g4;
+  g4.addVertex(3);
+  Graph<int> g5 = g4;
+  Graph<int> g6;
+  g6 = g5;
+  g6.removeVertex(3);
 }
 
