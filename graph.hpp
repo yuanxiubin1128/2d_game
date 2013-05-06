@@ -3,12 +3,11 @@
 
 #include <vector>
 #include <list>
+#include <set>
+
 #include <algorithm>
 #include <iterator>
 
-
-// directed, weighted
-/// @todo weight type as param too?
 
 template <typename V,
           typename E = int>
@@ -486,9 +485,11 @@ std::vector<typename Graph<V, E>::pointer> Graph<V, E>::neighboursOf(const_refer
   if (vertex_it == m_vertices.end())
     return retval;
 
+  std::set<pointer> tmp;
   std::for_each((*vertex_it).m_edges.begin(), (*vertex_it).m_edges.end(),
-                [&retval](const EdgeTo& e)
-                { retval.push_back(e.m_destination); }); /// @todo unique push!
+                [&tmp, &retval](const EdgeTo& e)
+                { if (tmp.insert(e.m_destination).second)
+                    retval.push_back(e.m_destination); });
 
   return retval;
 }
