@@ -60,6 +60,7 @@ public:
   bool empty() const  { return m_vertices.empty(); }
   size_type numberOfVertices() const { return m_vertices.size(); }
   size_type numberOfEdges() const;
+  void resize(size_type size) { m_vertices.resize(size); }
 
   // Modifiers
   bool addVertex(const_reference data);
