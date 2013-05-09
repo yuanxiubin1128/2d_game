@@ -1,4 +1,16 @@
 seed
 ====
 
-Project template with autobuild, unittest and doc generator tools
+Project template with autobuild, unittest and doc generator tools.
+
+Usage:
+	cmake .   // the first time and when any CMakeLists.txt changes
+	make      // build executable
+	make test // build test
+	make cov  // execute test binary and checks leak and coverage.
+	make doc  // generate doxygen html
+
+target dependencies:
+	executable -> libs
+	test -> libs
+	cov -> test
