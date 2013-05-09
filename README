@@ -22,8 +22,13 @@ Requirements
 ============
 
   CMake >= 2.6
-  cxxtest >= 4
+  cxxtest >= 4  // testsuites under namespace
   doxygen
   valgrind
   gdb
   lcov
+
+TODO
+====
+
+  CFLAGS depending on build: release/test

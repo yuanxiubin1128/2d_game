@@ -54,6 +54,8 @@ find .. -name *.gcda -exec rm -rf {} \;
 test_binary="`pwd`/$test"
 echo -e "${pre}Run tests${post}"
 
+echo "hello `pwd` "
+
 valgrind \
       --log-file=leak.log \
       --leak-check=full \
@@ -63,7 +65,7 @@ valgrind \
       --num-callers=30 \
       --malloc-fill=0xaa \
       --free-fill=0xdd \
-      --suppressions=valgrind.supp \
+      --suppressions=./tools/valgrind.supp \
       $test_binary | tee $test.out; retval=$PIPESTATUS
 
 # NOTE to gen suppressions run:
@@ -100,7 +102,7 @@ fi
 
 
 echo -e "${pre}Capture coverage info${post}"
-lcov --directory ../build --capture -o lcov.info
+lcov --directory ../lib --capture -o lcov.info
 # some classes are not used in the lib yet
 # lcov --directory ../test --capture -o lcov2.info
 # cat lcov2.info >> lcov.info
@@ -116,10 +118,10 @@ mkdir cov
 genhtml --frames --legend -o ./cov lcov.info
 
 echo -e "${pre}Checking the coverage results${post}"
-./cov_check.pl 90 cov/index.html
+./tools/cov_check.pl 90 cov/index.html
 
 echo -e "${pre}Checking leak results${post}"
-./leak_check.pl leak.log
+./tools/leak_check.pl leak.log
 if [ $? == 1 ]; then
   if yesno "run 'vim leak.log' ?"; then
     vim leak.log
