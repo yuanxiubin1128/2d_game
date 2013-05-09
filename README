@@ -3,14 +3,27 @@ seed
 
 Project template with autobuild, unittest and doc generator tools.
 
-Usage:
-	cmake .   // the first time and when any CMakeLists.txt changes
-	make      // build executable
-	make test // build test
-	make cov  // execute test binary and checks leak and coverage.
-	make doc  // generate doxygen html
+Usage
+=====
+
+  cmake .   // the first time and when any CMakeLists.txt changes
+  make      // build libs and executable
+  make test // build test
+  make cov  // execute test binary and checks leak and coverage.
+  make doc  // generate doxygen html
 
 target dependencies:
-	executable -> libs
-	test -> libs
-	cov -> test
+
+  executable -> libs
+  test -> libs
+  cov -> test
+
+Requirements
+============
+
+  CMake >= 2.6
+  cxxtest >= 4
+  doxygen
+  valgrind
+  gdb
+  lcov
