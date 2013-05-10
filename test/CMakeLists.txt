@@ -1,17 +1,31 @@
-# set(CMAKE_CXX_COMPILER "/usr/lib/colorgcc/bin/g++")
 
-# NOTE testing compiler flags may differ from release flags: debug info, etc
-set (CXX_FLAGS "-Wall -Wextra -pedantic -Weffc++ -Wshadow "
-               "-Wpointer-arith -Wcast-qual "
-               "-ggdb -fprofile-arcs -ftest-coverage --std=c++0x " )
+# set(BUILD_TESTING_WITH_DEBUG CMAKE_BUILD_TYPE EQUAL "DEBUG" AND (TARGET EQUAL "cov" OR TARGET EQUAL "test")
+# if (NOT BUILD_TESTING_WITH_DEBUG)
+#     exit("cicaaaaa")
+# endif (NOT BUILD_TESTING_WITH_DEBUG)
 
-add_definitions( ${CXX_FLAGS} )
+# set(BUILD_TESTING_WITH_DEBUG CMAKE_BUILD_TYPE EQUAL "DEBUG" AND (TARGET EQUAL "cov" OR TARGET EQUAL "test")
+# if (CMAKE_BUILD_TYPE EQUAL "Debu")
+#     message("DENES DEBUG")
+# endif (CMAKE_BUILD_TYPE EQUAL "DEBUG")
+# message("cicc ${CMAKE_BUILD_TYPE}")
+# message("cicc2 ${TARGET}")
 
+# get_cmake_property(_variableNames VARIABLES)
+# foreach (_variableName ${_variableNames})
+#     message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()
+
+if (NOT ${CMAKE_BUILD_TYPE} EQUAL "Debug")
+    exit("cicaaaaa nemdebug")
+    if (NOT ${TARGET} EQUAL "Debug")
+    exit("cicaaaaa nemdebug")
+endif (NOT ${CMAKE_BUILD_TYPE} EQUAL "Debug")
+endif (NOT ${CMAKE_BUILD_TYPE} EQUAL "Debug")
 
 find_package(CxxTest)
 if(CXXTEST_FOUND)
 
-#   set(CXXTEST_USE_PERL TRUE)
   include_directories(${CXXTEST_INCLUDE_DIR}
                       ../lib)
 
@@ -29,6 +43,7 @@ if(CXXTEST_FOUND)
                         subsystem_1
                         gcov)
 endif()
+
 
 
 add_custom_target( test
