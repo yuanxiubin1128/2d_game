@@ -67,8 +67,8 @@ public:
   // Modifiers
   bool addVertex(const_reference data);
   bool removeVertex(const_reference data);
-  bool addEdge(const_reference source, const_reference destination, float weight = 0);
-  bool removeEdge(const_reference source, const_reference destination, float weight = 0);
+  bool addEdge(const_reference source, const_reference destination, E weight = 0);
+  bool removeEdge(const_reference source, const_reference destination, E weight = 0);
   bool removeAllEdges(const_reference source, const_reference destination);
 
   // Lookup
@@ -77,7 +77,7 @@ public:
   std::vector<pointer> neighboursOf(const_reference data) const;
 
   /// @todo come up with a more clear name
-  std::vector<float> edgesBetween(const_reference source, const_reference destination) const;
+  std::vector<E> edgesBetween(const_reference source, const_reference destination) const;
   std::vector<Edge> edges() const;
 
   // iterators
@@ -437,7 +437,7 @@ inline bool Graph<V, E, Alloc>::removeVertex(const_reference data)
 }
 
 template <typename V, typename E, typename Alloc>
-bool Graph<V, E, Alloc>::addEdge(const_reference source, const_reference destination, float weight)
+bool Graph<V, E, Alloc>::addEdge(const_reference source, const_reference destination, E weight)
 {
   typename std::vector<Vertex>::iterator source_it = find(source);
   if (source_it == m_vertices.end())
@@ -455,7 +455,7 @@ bool Graph<V, E, Alloc>::addEdge(const_reference source, const_reference destina
 }
 
 template <typename V, typename E, typename Alloc>
-inline bool Graph<V, E, Alloc>::removeEdge(const_reference source, const_reference destination, float weight)
+inline bool Graph<V, E, Alloc>::removeEdge(const_reference source, const_reference destination, E weight)
 {
   typename std::vector<Vertex>::iterator source_it = find(source);
   if (source_it == m_vertices.end())
@@ -518,9 +518,9 @@ std::vector<typename Graph<V, E, Alloc>::pointer> Graph<V, E, Alloc>::neighbours
 }
 
 template <typename V, typename E, typename Alloc>
-std::vector<float> Graph<V, E, Alloc>::edgesBetween(const_reference source, const_reference destination) const
+std::vector<E> Graph<V, E, Alloc>::edgesBetween(const_reference source, const_reference destination) const
 {
-  std::vector<float> retval;
+  std::vector<E> retval;
   typename std::vector<Vertex>::const_iterator vertex_it = find(source);
   if (vertex_it == m_vertices.end())
     return retval;
