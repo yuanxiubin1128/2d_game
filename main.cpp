@@ -44,7 +44,7 @@ int main()
 
   assert(g.numberOfEdges() == 1);
   {
-    const std::vector<float> eb = g.edgesBetween(2, 5);
+    const std::vector<int> eb = g.edgesBetween(2, 5);
     assert(eb.size() == 1);
     assert(eb[0] == 0);
   }
@@ -152,8 +152,11 @@ int main()
 
   std::cout << "frankon vege" << std::endl;
 
-//   assert(toDot(g2, "itt.dot") == true);
-//   return 0;
+//   toDot(g2, "itt.dot");
+//   Graph<int> read_g;
+//   fromDot("itt.dot", read_g);
+//   assert(g2 == read_g);
+
 
 
   Graph<int> g4;
