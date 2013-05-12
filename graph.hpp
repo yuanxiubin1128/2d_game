@@ -16,8 +16,8 @@ template <typename V,
 class Graph {
 
 private:
-  class Vertex;
-  class EdgeTo;
+  struct Vertex;
+  struct EdgeTo;
 
 public:
 
