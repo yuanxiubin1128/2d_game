@@ -185,7 +185,7 @@ private:
   struct Vertex {
 
     Vertex(const_reference data, Alloc allocator);
-    Vertex(const Vertex& o) : m_data(o.m_data), m_edges(o.m_edges), m_allocator(o.m_allocator) {}
+    Vertex(const Vertex& o);
     ~Vertex();
     Vertex& operator=(Vertex o) { swap(o); return *this; }
     void swap(Vertex& o) { std::swap(m_data, o.m_data); std::swap(m_edges, o.m_edges); std::swap(m_allocator, o.m_allocator);}
@@ -350,10 +350,20 @@ inline Graph<V, E, Alloc>::Vertex::Vertex(const_reference data, Alloc allocator)
 }
 
 template <typename V, typename E, typename Alloc>
+inline Graph<V, E, Alloc>::Vertex::Vertex(const Vertex& o)
+  : m_data()
+  , m_edges(o.m_edges)
+  , m_allocator(o.m_allocator)
+{
+  m_data = m_allocator.allocate(1);
+  m_allocator.construct(m_data, *(o.m_data));
+}
+
+template <typename V, typename E, typename Alloc>
 inline Graph<V, E, Alloc>::Vertex::~Vertex()
 {
   m_allocator.destroy(m_data);
-  m_allocator.deallocate(m_data, sizeof(V));
+  m_allocator.deallocate(m_data, 1);
 }
 
 template <typename V, typename E, typename Alloc>
