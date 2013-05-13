@@ -110,33 +110,33 @@ int main()
   Graph<int>::edge_iterator edge_it;
   Graph<int>::edge_iterator beee = g2.edge_begin();
   edge_it = beee;
-  assert(edge_it == g2.edge_begin());
-    Graph<int>::pointer source = (*edge_it).getSource();
-    Graph<int>::pointer destination = (*edge_it).getDestination();
-    assert (*source == 1);
-    assert (*destination == 2);
+//    assert(edge_it == g2.edge_begin());
+    int source = (*edge_it).getSource();
+    int destination = (*edge_it).getDestination();
+    assert (source == 1);
+    assert (destination == 2);
 
     ++edge_it;
     source = (*edge_it).getSource();
     destination = (*edge_it).getDestination();
-    assert (*source == 1);
-    assert (*destination == 3);
+    assert (source == 1);
+    assert (destination == 3);
 
      ++edge_it;
     source = (*edge_it).getSource();
     destination = (*edge_it).getDestination();
-    assert (*source == 2);
-    assert (*destination == 4);
+    assert (source == 2);
+    assert (destination == 4);
 
   int aasdads = 23;
 //   Graph<int>::edge_iterator edge_it;
 
   for(/*Graph<int>::edge_iterator*/ edge_it = g2.edge_begin(); edge_it != g2.edge_end(); ++edge_it) {
-    Graph<int>::pointer source = (*edge_it).getSource();
-    Graph<int>::pointer destination = (*edge_it).getDestination();
+    int source = (*edge_it).getSource();
+    int destination = (*edge_it).getDestination();
     std::cout << "edge: "
-              << *source << " "
-              << *destination << " "
+              << source << " "
+              << destination << " "
               << (*edge_it).getWeight() << std::endl;
   }
 
@@ -146,8 +146,8 @@ int main()
 
   Graph<int>::edge_iterator edge_it2 = g2.edge_begin();
   edge_it2 += 2;
-  assert(*((*edge_it2).getSource()) == 2);
-  assert(*((*edge_it2).getDestination()) == 4);
+  assert( (*edge_it2).getSource() == 2);
+  assert( (*edge_it2).getDestination() == 4);
   assert((*edge_it2).getWeight() == 0);
 
   std::cout << "frankon vege" << std::endl;

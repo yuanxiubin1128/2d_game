@@ -29,7 +29,9 @@ public:
   typedef const V& const_reference;
   typedef std::ptrdiff_t difference_type;
 
-  struct Edge {
+  class Edge {
+
+  public:
 
     Edge() : m_source(0), m_destination(0), m_weight() {}
     Edge(pointer source, pointer destination, E weight);
@@ -37,9 +39,11 @@ public:
     Edge& operator=(Edge o) { swap(o); return *this; }
     void swap(Edge& o);
 
-    pointer getSource() const { return m_source; }
-    pointer getDestination() const { return m_destination; }
+    reference getSource() const { return *m_source; }
+    reference getDestination() const { return *m_destination; }
     E getWeight() const { return m_weight; }
+
+  private:
 
     pointer m_source;
     pointer m_destination;
