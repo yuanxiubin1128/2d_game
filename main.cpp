@@ -23,7 +23,7 @@ int main()
   assert(g.empty() == false);
   assert(g.numberOfVertices() == 1);
   {
-    const std::vector<int*> v = g.vertices();
+    const std::vector<const int*> v = g.vertices();
     assert(v.size() == 1);
     assert(*(v[0]) == 2);
   }
@@ -33,7 +33,7 @@ int main()
   assert(g.addVertex(b) == true);
   assert(g.numberOfVertices() == 2);
   {
-    const std::vector<int*> v = g.vertices();
+    const std::vector<const int*> v = g.vertices();
     assert(v.size() == 2);
     assert(*(v[0]) == 2);
     assert(*(v[1]) == 5);
@@ -51,7 +51,7 @@ int main()
   assert(g.edgesBetween(5, 2).size() == 0);
   assert(g.neighboursOf(2).size() == 1);
   {
-    const std::vector<int*> n = g.neighboursOf(2);
+    const std::vector<const int*> n = g.neighboursOf(2);
     assert(n.size() == 1);
     assert(*(n[0]) == 5);
   }

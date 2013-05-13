@@ -77,8 +77,8 @@ public:
 
   // Lookup
   bool contains(const_reference data) const { return find(data) != m_vertices.end(); }
-  std::vector<pointer> vertices() const;
-  std::vector<pointer> neighboursOf(const_reference data) const;
+  std::vector<const_pointer> vertices() const;
+  std::vector<const_pointer> neighboursOf(const_reference data) const;
 
   /// @todo come up with a more clear name
   std::vector<E> edgesBetween(const_reference source, const_reference destination) const;
@@ -441,9 +441,9 @@ inline bool Graph<V, E, Alloc>::removeVertex(const_reference data)
   if (it == m_vertices.end())
     return false;
 
-  std::vector<pointer> neighbours = neighboursOf(data);
+  std::vector<const_pointer> neighbours = neighboursOf(data);
   std::for_each(neighbours.begin(), neighbours.end(),
-                [this, &data] (pointer vertex)
+                [this, &data] (const_pointer vertex)
                 { this->removeAllEdges(*vertex, data); } );
 
   m_vertices.erase(it);
@@ -505,9 +505,9 @@ inline bool Graph<V, E, Alloc>::removeAllEdges(const_reference source, const_ref
 }
 
 template <typename V, typename E, typename Alloc>
-inline std::vector<typename Graph<V, E, Alloc>::pointer> Graph<V, E, Alloc>::vertices() const
+inline std::vector<typename Graph<V, E, Alloc>::const_pointer> Graph<V, E, Alloc>::vertices() const
 {
-  std::vector<pointer> retval;
+  std::vector<const_pointer> retval;
   std::for_each(m_vertices.begin(), m_vertices.end(),
                 [&retval](const Vertex& v)
                 { retval.push_back(v.m_data); });
@@ -515,9 +515,9 @@ inline std::vector<typename Graph<V, E, Alloc>::pointer> Graph<V, E, Alloc>::ver
 }
 
 template <typename V, typename E, typename Alloc>
-std::vector<typename Graph<V, E, Alloc>::pointer> Graph<V, E, Alloc>::neighboursOf(const_reference data) const
+std::vector<typename Graph<V, E, Alloc>::const_pointer> Graph<V, E, Alloc>::neighboursOf(const_reference data) const
 {
-  typename std::vector<pointer> retval;
+  typename std::vector<const_pointer> retval;
   typename std::vector<Vertex >::const_iterator vertex_it = find(data);
   if (vertex_it == m_vertices.end())
     return retval;
