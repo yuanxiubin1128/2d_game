@@ -79,9 +79,7 @@ public:
   bool contains(const_reference data) const { return find(data) != m_vertices.end(); }
   std::vector<const_pointer> vertices() const;
   std::vector<const_pointer> neighboursOf(const_reference data) const;
-
-  /// @todo come up with a more clear name
-  std::vector<E> edgesBetween(const_reference source, const_reference destination) const;
+  std::vector<E> weightsBetween(const_reference source, const_reference destination) const;
   std::vector<Edge> edges() const;
 
   // iterators
@@ -532,7 +530,7 @@ std::vector<typename Graph<V, E, Alloc>::const_pointer> Graph<V, E, Alloc>::neig
 }
 
 template <typename V, typename E, typename Alloc>
-std::vector<E> Graph<V, E, Alloc>::edgesBetween(const_reference source, const_reference destination) const
+std::vector<E> Graph<V, E, Alloc>::weightsBetween(const_reference source, const_reference destination) const
 {
   std::vector<E> retval;
   typename std::vector<Vertex>::const_iterator vertex_it = find(source);

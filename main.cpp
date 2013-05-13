@@ -44,7 +44,7 @@ int main()
 
   assert(g.numberOfEdges() == 1);
   {
-    const std::vector<int> eb = g.edgesBetween(2, 5);
+    const std::vector<int> eb = g.weightsBetween(2, 5);
     assert(eb.size() == 1);
     assert(eb[0] == 0);
   }
