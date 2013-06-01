@@ -35,7 +35,7 @@ World::World(const std::string& filename) {
 
 void
 World::RunMarchingSquares() {
-  std::cout << "Running marchin squares on map " << width_ << "x" << height_ << " ..." << std::endl;
+  //std::cout << "Running marchin squares on map " << width_ << "x" << height_ << " ..." << std::endl;
   std::vector< std::pair<float2, float2> > lines;
   for (size_t y = 1; y < height_; ++y) {
     for (size_t x = 1; x < width_; ++x) {
@@ -67,8 +67,8 @@ World::RunMarchingSquares() {
           
         case 0x1: /* TL       = TL  */ s = 7; e = 1; break;
         case 0x2: /*   TR     = TR  */ s = 1; e = 3; break;
-        case 0x4: /*     BL   = BL  */ s = 3; e = 5; break;
-        case 0x8: /*       BR = BR  */ s = 5; e = 7; break;
+        case 0x4: /*     BL   = BL  */ s = 5; e = 7; break;
+        case 0x8: /*       BR = BR  */ s = 3; e = 5; break;
 
         case 0x3: /* TLTR     = top    */ s = 7; e = 3; break;
         case 0x5: /* TL  BL   = left   */ s = 1; e = 5; break;
@@ -106,5 +106,12 @@ World::RunMarchingSquares() {
 
   // build quadtree and combine lines (there are many, many small pieces around now, combine to longer lines)
 
-  std::cout << lines.size() << std::endl;
+  // dump to HTML/SVG
+  std::cout << "<!DOCTYPE html>" << std::endl;
+  std::cout << "<html><body><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewbox=\"0 0 " << width_ << " " << height_ << "\">" << std::endl;
+  for (size_t i = 0; i < lines.size(); ++i) {
+    const std::pair<float2, float2>& l = lines[i];
+    std::cout << "\t<line x1=\"" << l.first.x << "\" y1=\"" << l.first.y << "\" x2=\"" << l.second.x << "\" y2=\"" << l.second.y << "\" stroke=\"black\" stroke-width=\"0.25\"/>" << std::endl;
+  }
+  std::cout << "</svg></body></html>" << std::endl;
 }
