@@ -18,4 +18,4 @@ include_directories (../lib)
 
 
 add_executable(project_seed main.cpp)
-target_link_libraries(project_seed subsystem_1)
+target_link_libraries(project_seed subsystem_1 world)

@@ -17,7 +17,7 @@ set(CMAKE_CXX_FLAGS " -Wall -Wextra -pedantic -Weffc++ -Wshadow --std=c++0x ")
 set(CMAKE_CXX_FLAGS_DEBUG " ${CMAKE_CXX_FLAGS} -ggdb -fprofile-arcs -ftest-coverage ")
 set(CMAKE_CSS_FLAGS_RELEASE " ${CMAKE_CXX_FLAGS} ")
 
-set(CMAKE_CXX_COMPILER "/usr/lib/colorgcc/bin/g++")
+set(CMAKE_CXX_COMPILER "clang++")
 
 # get_cmake_property(_variableNames VARIABLES)
 # foreach (_variableName ${_variableNames})
