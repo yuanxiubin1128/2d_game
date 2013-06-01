@@ -19,7 +19,7 @@ struct float2 {
 
 	inline float2() {}
 	inline float2(float f) : x(f), y(f) {}
-	inline float2(float x, float y) : x(x), y(y) {}
+	inline float2(float x_, float y_) : x(x_), y(y_) {}
 	       float2(const struct float3& v);
 	       float2(const struct float4& v);
 
@@ -58,8 +58,8 @@ struct float3 {
 
 	inline float3() {}
 	inline float3(float f) : x(f), y(f), z(f) {}
-	inline float3(float x, float y, float z) : x(x), y(y), z(z) {}
-	inline float3(const float2& v, float z) : x(v.x), y(v.y), z(z) {}
+	inline float3(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {}
+	inline float3(const float2& v, float z_) : x(v.x), y(v.y), z(z_) {}
 	       float3(const struct float4& v);
 
 	inline float3 operator +() const { return *this; }
@@ -97,9 +97,9 @@ struct float4 {
 
 	inline float4() {}
 	inline float4(float f) : x(f), y(f), z(f), w(f) {}
-	inline float4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
-	inline float4(const float2& v, float z, float w) : x(v.x), y(v.y), z(z), w(w) {}
-	inline float4(const float3& v, float w) : x(v.x), y(v.y), z(v.z), w(w) {}
+	inline float4(float x_, float y_, float z_, float w_) : x(x_), y(y_), z(z_), w(w_) {}
+	inline float4(const float2& v, float z_, float w_) : x(v.x), y(v.y), z(z_), w(w_) {}
+	inline float4(const float3& v, float w_) : x(v.x), y(v.y), z(v.z), w(w_) {}
 
 	inline float4 operator +() const { return *this; }
 	inline float4 operator -() const { return float4(-x, -y, -z, -w); }
@@ -143,7 +143,7 @@ struct float2x2 {
 	float2 s, t; // rows
 
 	inline float2x2() {}
-	inline float2x2(const float2& s, const float2& t) : s(s), t(t) {}
+	inline float2x2(const float2& s_, const float2& t_) : s(s_), t(t_) {}
 	inline float2x2(float sx, float sy,
 	                float tx, float ty) : s(sx, sy), t(tx, ty) {}
 };
@@ -151,10 +151,9 @@ struct float2x2 {
 inline float2x2 transpose(const float2x2& m) { return float2x2(float2(m.s.x, m.t.x), float2(m.s.y, m.t.y)); }
 
 inline float2x2 operator *(const float2x2& m1, const float2x2& m2) {
-	float2x2 m3 = transpose(m2);
-	return float2x2(
-	           float2(dot(m1.s, m3.s), dot(m1.s, m3.t)),
-		       float2(dot(m1.t, m3.s), dot(m1.t, m3.t)));
+	const float2x2 m3 = transpose(m2);
+	return float2x2(float2(dot(m1.s, m3.s), dot(m1.s, m3.t)),
+             			float2(dot(m1.t, m3.s), dot(m1.t, m3.t)));
 }
 
 inline float2   operator *(const float2x2& m, const float2& v) { return float2(dot(m.s, v), dot(m.t, v)); }
@@ -170,38 +169,36 @@ struct float3x3 {
 	float3 s, t, u; // rows
 
 	inline float3x3() {}
-	inline float3x3(const float3& s, const float3& t, const float3& u) : s(s), t(t), u(u) {}
+	inline float3x3(const float3& s_, const float3& t_, const float3& u_) : s(s_), t(t_), u(u_) {}
 	inline float3x3(float sx, float sy, float sz,
 	                float tx, float ty, float tz,
-                    float ux, float uy, float uz) : s(sx, sy, sz), t(tx, ty, tz), u(ux, uy, uz) {}
+                  float ux, float uy, float uz) : s(sx, sy, sz), t(tx, ty, tz), u(ux, uy, uz) {}
 };
 
 inline float3x3 transpose(const float3x3& m) {
 	return float3x3(float3(m.s.x, m.t.x, m.u.x),
 	                float3(m.s.y, m.t.y, m.u.y),
-                    float3(m.s.z, m.t.z, m.u.z));
+                  float3(m.s.z, m.t.z, m.u.z));
 }
 
 inline float3x3 operator *(const float3x3& m1, const float3x3& m2) {
-	float3x3 m3 = transpose(m2);
+	const float3x3 m3 = transpose(m2);
 	return float3x3(float3(dot(m1.s, m3.s), dot(m1.s, m3.t), dot(m1.s, m3.u)),
-                    float3(dot(m1.t, m3.s), dot(m1.t, m3.t), dot(m1.t, m3.u)),
-                    float3(dot(m1.u, m3.s), dot(m1.u, m3.t), dot(m1.u, m3.u)));
+                  float3(dot(m1.t, m3.s), dot(m1.t, m3.t), dot(m1.t, m3.u)),
+                  float3(dot(m1.u, m3.s), dot(m1.u, m3.t), dot(m1.u, m3.u)));
 }
 
 inline float3   operator *(const float3x3& m, const float3& v) { return float3(dot(m.s, v), dot(m.t, v), dot(m.u, v)); }
 inline float3x3 operator *(const float3x3& m, float f)         { return float3x3(m.s * f, m.t * f, m.u * f); }
 inline float3x3 operator *(float f, const float3x3& m)         { return float3x3(m.s * f, m.t * f, m.u * f); }
 
-inline float determinant(const float3x3& m)
-{
+inline float determinant(const float3x3& m) {
 	return m.s.x * determinant(float2x2(m.t.y, m.t.z, m.u.y, m.u.z))
 		   - m.s.y * determinant(float2x2(m.t.x, m.t.z, m.u.x, m.u.z))
 		   + m.s.z * determinant(float2x2(m.t.x, m.t.y, m.u.x, m.u.y));
 }
 
-inline float3x3 inverse(const float3x3& m)
-{
+inline float3x3 inverse(const float3x3& m) {
 	return float3x3(
 		       determinant(float2x2(m.t.y, m.t.z, m.u.y, m.u.z)),
 		       determinant(float2x2(m.s.z, m.s.y, m.u.z, m.u.y)),
@@ -224,28 +221,26 @@ struct float4x4 {
 	float4 s, t, u, v; // rows
 
 	inline float4x4() {}
-	inline float4x4(const float4& s, const float4& t, const float4& u, const float4& v) : s(s), t(t), u(u), v(v) {}
+	inline float4x4(const float4& s_, const float4& t_, const float4& u_, const float4& v_) : s(s_), t(t_), u(u_), v(v_) {}
 	inline float4x4(float sx, float sy, float sz, float sw,
 	                float tx, float ty, float tz, float tw,
-                    float ux, float uy, float uz, float uw,
-                    float vx, float vy, float vz, float vw) : s(sx, sy, sz, sw), t(tx, ty, tz, tw), u(ux, uy, uz, uw), v(vx, vy, vz, vw) {}
+                  float ux, float uy, float uz, float uw,
+                  float vx, float vy, float vz, float vw) : s(sx, sy, sz, sw), t(tx, ty, tz, tw), u(ux, uy, uz, uw), v(vx, vy, vz, vw) {}
 };
 
 inline float4x4 transpose(const float4x4& m) {
-	return float4x4(
-               float4(m.s.x, m.t.x, m.u.x, m.v.x),
-	           float4(m.s.y, m.t.y, m.u.y, m.v.y),
-		       float4(m.s.z, m.t.z, m.u.z, m.v.z),
-		       float4(m.s.w, m.t.w, m.u.w, m.v.w));
+	return float4x4(float4(m.s.x, m.t.x, m.u.x, m.v.x),
+	           			float4(m.s.y, m.t.y, m.u.y, m.v.y),
+		       				float4(m.s.z, m.t.z, m.u.z, m.v.z),
+		       				float4(m.s.w, m.t.w, m.u.w, m.v.w));
 }
 
 inline float4x4 operator *(const float4x4& m1, const float4x4& m2) {
-	float4x4 m3 = transpose(m2);
-	return float4x4(
-	           float4(dot(m1.s, m3.s), dot(m1.s, m3.t), dot(m1.s, m3.u), dot(m1.s, m3.v)),
-		       float4(dot(m1.t, m3.s), dot(m1.t, m3.t), dot(m1.t, m3.u), dot(m1.t, m3.v)),
-		       float4(dot(m1.u, m3.s), dot(m1.u, m3.t), dot(m1.u, m3.u), dot(m1.u, m3.v)),
-		       float4(dot(m1.v, m3.s), dot(m1.v, m3.t), dot(m1.v, m3.u), dot(m1.v, m3.v)));
+	const float4x4 m3 = transpose(m2);
+	return float4x4(float4(dot(m1.s, m3.s), dot(m1.s, m3.t), dot(m1.s, m3.u), dot(m1.s, m3.v)),
+		       				float4(dot(m1.t, m3.s), dot(m1.t, m3.t), dot(m1.t, m3.u), dot(m1.t, m3.v)),
+		       				float4(dot(m1.u, m3.s), dot(m1.u, m3.t), dot(m1.u, m3.u), dot(m1.u, m3.v)),
+		       				float4(dot(m1.v, m3.s), dot(m1.v, m3.t), dot(m1.v, m3.u), dot(m1.v, m3.v)));
 }
 
 inline float4   operator *(const float4x4& m, const float4& v) { return float4(dot(m.s, v), dot(m.t, v), dot(m.u, v), dot(m.v, v)); }

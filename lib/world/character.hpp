@@ -1,9 +1,9 @@
-#ifndef GAME_CHARACTER_HPP
-#define GAME_CHARACTER_HPP
+#ifndef WORLD_CHARACTER_HPP
+#define WORLD_CHARACTER_HPP
 
 #include "entity.hpp"
 
-namespace game {
+namespace world {
 
   class Character : public Entity {
     
@@ -18,5 +18,5 @@ namespace game {
   };
 }
 
-#endif // GAME_CHARACTER_HPP
+#endif // WORLD_CHARACTER_HPP
 

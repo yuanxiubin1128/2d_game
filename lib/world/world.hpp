@@ -1,10 +1,10 @@
-#ifndef GAME_WORLD_HPP
-#define GAME_WORLD_HPP
+#ifndef WORLD_WORLD_HPP
+#define WORLD_WORLD_HPP
 
 #include <string>
 #include <vector>
 
-namespace game {
+namespace world {
 
   class World {
     enum CellType { FREE, SOLID, DESTROYABLE };
@@ -16,9 +16,9 @@ namespace game {
   public:
     World(const std::string& filename);
 
-
+    void RunMarchingSquares();
   };
 
 }
 
-#endif // GAME_WORLD_HPP
+#endif // WORLD_WORLD_HPP

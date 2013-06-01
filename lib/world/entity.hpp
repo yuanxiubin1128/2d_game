@@ -1,9 +1,9 @@
-#ifndef GAME_ENTITY_HPP
-#define GAME_ENTITY_HPP
+#ifndef WORLD_ENTITY_HPP
+#define WORLD_ENTITY_HPP
 
 #include "floats.hpp"
 
-namespace game {
+namespace world {
 
   class Entity {
     float2 position_;    // x=west/east, y=south/north
@@ -16,5 +16,5 @@ namespace game {
 
 }
 
-#endif // GAME_ENTITY_HPP
+#endif // WORLD_ENTITY_HPP
 

@@ -1,7 +1,7 @@
-#ifndef GAME_SIMULATOR_HPP
-#define GAME_SIMULATOR_HPP
+#ifndef WORLD_SIMULATOR_HPP
+#define WORLD_SIMULATOR_HPP
 
-namespace game {
+namespace world {
 
   class Simulator {
 
@@ -11,4 +11,4 @@ namespace game {
 
 }
 
-#endif // GAME_SIMULATOR_HPPs
+#endif // WORLD_SIMULATOR_HPP
