@@ -139,8 +139,7 @@ inline float3::float3(const struct float4& v) : x(v.x), y(v.y), z(v.z) { }
 
 // 2x2-matrix -----------------------------------------------------------------
 
-struct float2x2
-{
+struct float2x2 {
 	float2 s, t; // rows
 
 	inline float2x2() {}
@@ -154,7 +153,7 @@ inline float2x2 transpose(const float2x2& m) { return float2x2(float2(m.s.x, m.t
 inline float2x2 operator *(const float2x2& m1, const float2x2& m2) {
 	float2x2 m3 = transpose(m2);
 	return float2x2(
-	         float2(dot(m1.s, m3.s), dot(m1.s, m3.t)),
+	           float2(dot(m1.s, m3.s), dot(m1.s, m3.t)),
 		       float2(dot(m1.t, m3.s), dot(m1.t, m3.t)));
 }
 
@@ -174,22 +173,20 @@ struct float3x3 {
 	inline float3x3(const float3& s, const float3& t, const float3& u) : s(s), t(t), u(u) {}
 	inline float3x3(float sx, float sy, float sz,
 	                float tx, float ty, float tz,
-		              float ux, float uy, float uz) : s(sx, sy, sz), t(tx, ty, tz), u(ux, uy, uz) {}
+                    float ux, float uy, float uz) : s(sx, sy, sz), t(tx, ty, tz), u(ux, uy, uz) {}
 };
 
-inline float3x3 transpose(const float3x3& m)
-{
+inline float3x3 transpose(const float3x3& m) {
 	return float3x3(float3(m.s.x, m.t.x, m.u.x),
 	                float3(m.s.y, m.t.y, m.u.y),
-		              float3(m.s.z, m.t.z, m.u.z));
+                    float3(m.s.z, m.t.z, m.u.z));
 }
 
-inline float3x3 operator *(const float3x3& m1, const float3x3& m2)
-{
+inline float3x3 operator *(const float3x3& m1, const float3x3& m2) {
 	float3x3 m3 = transpose(m2);
 	return float3x3(float3(dot(m1.s, m3.s), dot(m1.s, m3.t), dot(m1.s, m3.u)),
-		              float3(dot(m1.t, m3.s), dot(m1.t, m3.t), dot(m1.t, m3.u)),
-		              float3(dot(m1.u, m3.s), dot(m1.u, m3.t), dot(m1.u, m3.u)));
+                    float3(dot(m1.t, m3.s), dot(m1.t, m3.t), dot(m1.t, m3.u)),
+                    float3(dot(m1.u, m3.s), dot(m1.u, m3.t), dot(m1.u, m3.u)));
 }
 
 inline float3   operator *(const float3x3& m, const float3& v) { return float3(dot(m.s, v), dot(m.t, v), dot(m.u, v)); }
@@ -230,15 +227,14 @@ struct float4x4 {
 	inline float4x4(const float4& s, const float4& t, const float4& u, const float4& v) : s(s), t(t), u(u), v(v) {}
 	inline float4x4(float sx, float sy, float sz, float sw,
 	                float tx, float ty, float tz, float tw,
-		              float ux, float uy, float uz, float uw,
-		              float vx, float vy, float vz, float vw) : s(sx, sy, sz, sw), t(tx, ty, tz, tw), u(ux, uy, uz, uw), v(vx, vy, vz, vw) {}
+                    float ux, float uy, float uz, float uw,
+                    float vx, float vy, float vz, float vw) : s(sx, sy, sz, sw), t(tx, ty, tz, tw), u(ux, uy, uz, uw), v(vx, vy, vz, vw) {}
 };
 
-inline float4x4 transpose(const float4x4& m)
-{
+inline float4x4 transpose(const float4x4& m) {
 	return float4x4(
-	         float4(m.s.x, m.t.x, m.u.x, m.v.x),
-	         float4(m.s.y, m.t.y, m.u.y, m.v.y),
+               float4(m.s.x, m.t.x, m.u.x, m.v.x),
+	           float4(m.s.y, m.t.y, m.u.y, m.v.y),
 		       float4(m.s.z, m.t.z, m.u.z, m.v.z),
 		       float4(m.s.w, m.t.w, m.u.w, m.v.w));
 }
@@ -246,7 +242,7 @@ inline float4x4 transpose(const float4x4& m)
 inline float4x4 operator *(const float4x4& m1, const float4x4& m2) {
 	float4x4 m3 = transpose(m2);
 	return float4x4(
-	         float4(dot(m1.s, m3.s), dot(m1.s, m3.t), dot(m1.s, m3.u), dot(m1.s, m3.v)),
+	           float4(dot(m1.s, m3.s), dot(m1.s, m3.t), dot(m1.s, m3.u), dot(m1.s, m3.v)),
 		       float4(dot(m1.t, m3.s), dot(m1.t, m3.t), dot(m1.t, m3.u), dot(m1.t, m3.v)),
 		       float4(dot(m1.u, m3.s), dot(m1.u, m3.t), dot(m1.u, m3.u), dot(m1.u, m3.v)),
 		       float4(dot(m1.v, m3.s), dot(m1.v, m3.t), dot(m1.v, m3.u), dot(m1.v, m3.v)));
