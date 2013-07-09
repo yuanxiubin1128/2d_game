@@ -561,7 +561,8 @@ inline std::vector<typename Graph<V, E, Alloc>::Edge> Graph<V, E, Alloc>::edges(
 
 
 template <typename V, typename E, typename Alloc>
-inline typename std::vector<typename Graph<V, E, Alloc>::Vertex >::const_iterator Graph<V, E, Alloc>::find(const_reference data) const
+inline typename std::vector<typename Graph<V, E, Alloc>::Vertex >::const_iterator
+Graph<V, E, Alloc>::find(const_reference data) const
 {
   return std::find_if(m_vertices.begin(), m_vertices.end(),
                       [&data](const Vertex& v)
@@ -569,7 +570,8 @@ inline typename std::vector<typename Graph<V, E, Alloc>::Vertex >::const_iterato
 }
 
 template <typename V, typename E, typename Alloc>
-inline typename std::vector<typename Graph<V, E, Alloc>::Vertex >::iterator Graph<V, E, Alloc>::find(const_reference data)
+inline typename std::vector<typename Graph<V, E, Alloc>::Vertex >::iterator
+Graph<V, E, Alloc>::find(const_reference data)
 {
   return std::find_if(m_vertices.begin(), m_vertices.end(),
                       [&data](const Vertex& v)

@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "graph.hpp"
+#include "graph/graph.hpp"
 
 
 namespace test { class TestSubsystem1DummyClassSuite; }
