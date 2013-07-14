@@ -1,0 +1,10 @@
+.kdev4/*
+.kdev_include_paths
+CMakeCache.txt
+CMakeFiles/*
+Makefile
+build/*
+cmake_install.cmake
+graph
+graph.kdev4
+libstdcxx-profile.*
