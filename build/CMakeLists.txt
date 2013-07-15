@@ -16,6 +16,13 @@ include_directories (../lib)
 
 # add_library (CppUtils SHARED ${CPP_UTILS_LIB_SOURCES})
 
-
-add_executable(project_seed main.cpp)
-target_link_libraries(project_seed subsystem_1 world)
+target_link_libraries(
+project_seed
+subsystem_1
+world
+cpp_utils
+pthread
+rt
+gcov
+ssl
+mysqlclient )

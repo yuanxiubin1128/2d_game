@@ -1,7 +1,7 @@
-seed
+2d_game
 ====
 
-Project template with autobuild, unittest and doc generator tools.
+A retro-style 2D game to practice teamwork and trying different software technoligies.
 
 Usage
 =====
@@ -28,26 +28,4 @@ Requirements
   gdb
   lcov
 
-TODO
-====
-
-  CFLAGS depending on build: release/test
-  
-  
-GIT awesomeness
-===============
-
-seed is a subtree and can be pulled in when modified.
-The steps were:
-
-git remote add origin https://github.com/polsene/2d_game.git
-git pull origin master
-
-git remote add seed https://github.com/cs0rbagomba/seed.git
-git fetch seed
-git merge -s ours --no-commit seed/master
-git read-tree -m -u seed/master
-git commit -m "Imported seed as a subtree."
-
-and now:
-git pull -s subtree seed master
+  pngpp check it!

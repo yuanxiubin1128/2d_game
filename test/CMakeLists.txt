@@ -36,11 +36,37 @@ if(CXXTEST_FOUND)
   ./tools/TestGlobalFixture.hpp
 
   subsystem_1_tests/test_dummy_class.hpp
-	graph/test_graph.hpp
+  graph/test_graph.hpp
+
+    cpp_utils/Fixture.hpp
+
+  cpp_utils/test_Logger.hpp
+  cpp_utils/test_ArgParse.hpp
+  cpp_utils/test_Common.hpp
+  cpp_utils/test_ConditionalVariable.hpp
+  cpp_utils/test_Multiton.hpp
+  cpp_utils/test_Mutex.hpp
+  cpp_utils/test_ObjectPool.hpp
+  cpp_utils/test_ScopedLock.hpp
+  cpp_utils/test_Semaphore.hpp
+#   cpp_utils/test_Singleton_DCLP.hpp
+#   cpp_utils/test_Singleton_call_once.hpp
+  # cpp_utils/test_Singleton.hpp Cannot test private member, Ficture.hpp loads it
+#   cpp_utils/test_Singleton_meyers.hpp
+  cpp_utils/test_Thread.hpp
+  cpp_utils/test_ThreadPool.hpp
+
+  cpp_utils/test_timerUser.hpp
+  cpp_utils/test_Timer.hpp
+  cpp_utils/test_Connection.hpp
+  cpp_utils/test_StreamConnection.hpp
+  cpp_utils/test_TcpConnection.hpp
+  cpp_utils/test_Message.hpp
   )
 
   target_link_libraries(test_projectseed
                         subsystem_1
+                        CppUtils
                         gcov)
 endif()
 
@@ -52,5 +78,4 @@ add_custom_target( test
 
 add_custom_target( cov
                    COMMAND ./tools/run_test.sh ./test_projectseed
-                   DEPENDS test_projectseed
-)
+                   DEPENDS test_projectseed )
