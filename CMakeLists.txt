@@ -10,8 +10,6 @@
 # TODO ensure that CMAKE_BUILD_TYPE=Debug before test or cov targets
 
 cmake_minimum_required (VERSION 2.6)
-# cmake_minimum_required(VERSION 2.8)
-
 project (PROJECT_SEED)
 
 set(CMAKE_CXX_FLAGS " -Wall -Wextra -pedantic -Weffc++ -Wshadow --std=c++0x ")
