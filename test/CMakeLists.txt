@@ -1,4 +1,3 @@
-
 # set(BUILD_TESTING_WITH_DEBUG CMAKE_BUILD_TYPE EQUAL "DEBUG" AND (TARGET EQUAL "cov" OR TARGET EQUAL "test")
 # if (NOT BUILD_TESTING_WITH_DEBUG)
 #     exit("cicaaaaa")
@@ -16,12 +15,12 @@
 #     message(STATUS "${_variableName}=${${_variableName}}")
 # endforeach()
 
-if (NOT ${CMAKE_BUILD_TYPE} EQUAL "Debug")
-    exit("cicaaaaa nemdebug")
-    if (NOT ${TARGET} EQUAL "Debug")
-    exit("cicaaaaa nemdebug")
-endif (NOT ${CMAKE_BUILD_TYPE} EQUAL "Debug")
-endif (NOT ${CMAKE_BUILD_TYPE} EQUAL "Debug")
+#if (NOT ${CMAKE_BUILD_TYPE} EQUAL "Debug")
+#    exit("cicaaaaa nemdebug")
+#    if (NOT ${TARGET} EQUAL "Debug")
+#    exit("cicaaaaa nemdebug")
+#endif (NOT ${CMAKE_BUILD_TYPE} EQUAL "Debug")
+#endif (NOT ${CMAKE_BUILD_TYPE} EQUAL "Debug")
 
 find_package(CxxTest)
 if(CXXTEST_FOUND)
@@ -37,6 +36,7 @@ if(CXXTEST_FOUND)
   ./tools/TestGlobalFixture.hpp
 
   subsystem_1_tests/test_dummy_class.hpp
+	graph/test_graph.hpp
   )
 
   target_link_libraries(test_projectseed
