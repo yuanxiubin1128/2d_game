@@ -3,13 +3,6 @@
 #     exit("cicaaaaa")
 # endif (NOT BUILD_TESTING_WITH_DEBUG)
 
-# set(BUILD_TESTING_WITH_DEBUG CMAKE_BUILD_TYPE EQUAL "DEBUG" AND (TARGET EQUAL "cov" OR TARGET EQUAL "test")
-# if (CMAKE_BUILD_TYPE EQUAL "Debu")
-#     message("DENES DEBUG")
-# endif (CMAKE_BUILD_TYPE EQUAL "DEBUG")
-# message("cicc ${CMAKE_BUILD_TYPE}")
-# message("cicc2 ${TARGET}")
-
 # get_cmake_property(_variableNames VARIABLES)
 # foreach (_variableName ${_variableNames})
 #     message(STATUS "${_variableName}=${${_variableName}}")
