@@ -1,34 +1,31 @@
-#include "timer.hpp"
 #include "event.hpp"
 #include "world.hpp"
 #include "logic.hpp"
 #include "widget.hpp"
+#include "loop.hpp"
+
+#include <cpp_utils/Logger.hpp>
+
+#include <iostream>
+
+#include <QtGui/QApplication>
+
 
 int main(int argc, char* argv[])
 {
-  prototype::Timer timer;
+  Logger::createInstance();
+  Logger::init(std::cout);
+  Logger::setLogLevel(Logger::FINEST);
+  QApplication app(argc, argv);
+
   prototype::EventQueue events;
   prototype::World world;
+  prototype::Logic logic(&events, &world);
+  prototype::Widget widget(&events, &world);
+  prototype::Loop loop(&logic, &widget);
 
-  prototype::Logic logic;
-  logic.setEventQueue(&events);
-  logic.setWorldState(&world);
-
-  prototype::Widget widget;
-  widget.setWorldState(&world);
-  widget.setEventQueue(&events);
-
-  while(1) {
-
-    timer.registerStart();
-
-    float dt = timer.getAvaregeDelta();
-    logic.step(dt);
-    widget.render();
-
-    timer.registerStop();
-  }
-
-  return 0;
+  widget.show();
+  loop.start();
+  return app.exec();
 }
 

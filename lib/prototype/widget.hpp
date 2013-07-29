@@ -4,17 +4,23 @@
 #include "event.hpp"
 #include "world.hpp"
 
+#include <QtGui/QWidget>
+
 namespace prototype
 {
 
-  class Widget
+  class Widget : public QWidget
   {
+    Q_OBJECT
+
   public:
 
-    void setEventQueue(EventQueue* events) { m_events = events; }
-    void setWorldState(World* world) { m_world = world; }
+    Widget(EventQueue* e, World* w);
 
-    void render() {}
+    void render();
+
+  signals:
+    void renderLoopBack();
 
   private:
     EventQueue* m_events;

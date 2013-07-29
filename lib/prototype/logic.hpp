@@ -9,11 +9,11 @@ namespace prototype
 
   class Logic {
 
-
   public:
 
-    void setEventQueue(EventQueue* events) { m_events = events; }
-    void setWorldState(World* world) { m_world = world; }
+    Logic(EventQueue* e, World* w) : m_events(e), m_world(w) {}
+
+  public:
 
     void step(float delta_time) {}
 
