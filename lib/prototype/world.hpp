@@ -1,12 +1,24 @@
+#ifndef PROTOTYPE_WORLD_HPP
+#define PROTOTYPE_WORLD_HPP
 
-#include <object.hpp>
+#include "object.hpp"
 
+#include <vector>
 
 // Possible Mutex ?
 
-struct World {
+namespace prototype
+{
 
-  list<Object> m_objects;
+  class World
+  {
+
+  public:
+
+  private:
+    std::vector<Object> m_objects;
+  };
 
 }
 
+#endif // PROTOTYPE_WORLD_HPP

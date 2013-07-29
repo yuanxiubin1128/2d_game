@@ -1,38 +1,34 @@
+#include "timer.hpp"
+#include "event.hpp"
+#include "world.hpp"
+#include "logic.hpp"
+#include "widget.hpp"
 
+int main(int argc, char* argv[])
+{
+  prototype::Timer timer;
+  prototype::EventQueue events;
+  prototype::World world;
 
-#include <timer.hpp>
+  prototype::Logic logic;
+  logic.setEventQueue(&events);
+  logic.setWorldState(&world);
 
+  prototype::Widget widget;
+  widget.setWorldState(&world);
+  widget.setEventQueue(&events);
 
-int
-main(int argc, char* argv[]) {
+  while(1) {
 
+    timer.registerStart();
 
-  Timer timer;
-  EventQueue events;
-  World world;
-
-  Logic logic();
-  logic.setEventQueue(events);
-  logic.setWorldState(world);
-
-  Widget widget;
-  widget.setWorldState(world);
-  widget.setEventQueue(events);
-
-  widget.show();
-
-  for( ;; ) {
-  
-    timer.start();
-
-    int dt = timer.GetAvgTime();
-    logic.Step(dt);
-  
+    float dt = timer.getAvaregeDelta();
+    logic.step(dt);
     widget.render();
 
-    timer.stop();
+    timer.registerStop();
   }
 
-
+  return 0;
 }
 

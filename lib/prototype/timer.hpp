@@ -1,15 +1,26 @@
+#ifndef PROTOYPE_TIMIR_HPP
+#define PROTOYPE_TIMIR_HPP
 
+#include <queue>
 
-class timer {
+namespace prototype
+{
 
-public:
-  void RegisterStart();
-  void RegisterStop();
+  class Timer
+  {
 
-  int GetAvgDelta();
+  public:
+    void registerStart() {}
+    void registerStop() {}
 
-private:
-  int m_time;
-  queue<float> m_diffs;
+    float getAvaregeDelta() const { return 0.0; }
+
+  private:
+    int m_time;
+    std::queue<float> m_diffs;
+  };
 
 }
+
+#endif // PROTOYPE_TIMIR_HPP
+

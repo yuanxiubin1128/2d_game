@@ -11,6 +11,7 @@ Usage
   make test // build test
   make cov  // execute test binary and checks leak and coverage.
   make doc  // generate doxygen html
+  make proto // build prototype
 
 target dependencies:
 
@@ -35,11 +36,11 @@ Subtrees
 ========
 git init .
 git remote add 2d_game https://github.com/polsene/2d_game
+git pull 2d_game master
 git remote add seed  https://github.com/cs0rbagomba/seed.git
 git remote add cpp_utils  https://github.com/cs0rbagomba/cpp_utils.git
 git remote add graph  https://github.com/cs0rbagomba/graph.git
 git remote update
-git pull --all
 
 To pull only one subtree:
 git pull -s subtree cpp_utils
