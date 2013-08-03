@@ -69,18 +69,11 @@ void prototype::Widget::drawObject(Object& o, QPaintEvent* event)
 {
   QPainter painter(this);
 
-//   painter.setBrushOrigin(o.m_x, o.m_y);
-  painter.translate(width() / 2, height() / 2);
-
-  painter.setPen(Qt::NoPen);
-  painter.setBrush(Qt::darkGray);
-  painter.drawEllipse(-7, -7, 20, 20);
-
   QRadialGradient gradient(-3, -3, 10);
   gradient.setColorAt(0, Qt::yellow);
   gradient.setColorAt(1, Qt::darkYellow);
 
   painter.setBrush(gradient);
   painter.setPen(QPen(Qt::black, 0));
-  painter.drawEllipse(-10, -10, 20, 20);
+  painter.drawEllipse(o.m_x-10, o.m_y-10, 20, 20);
 }
