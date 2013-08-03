@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 {
   Logger::createInstance();
   Logger::init(std::cout);
-  Logger::setLogLevel(Logger::FINEST);
+  Logger::setLogLevel(Logger::INFO);
   QApplication app(argc, argv);
 
   prototype::EventQueue events;

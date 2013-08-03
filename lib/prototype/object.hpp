@@ -14,7 +14,11 @@ namespace prototype
       : m_id(id), m_direction(direction), m_speed(speed), m_x(x), m_y(y) {}
 
     std::string m_id; // IP
-    int m_direction; // 0-7 enumerating directions starting from top going clockwise.
+
+    // 0-7 enumerating directions starting from top going clockwise.
+    // 0 - North, 1 - NE, 2, East, ...
+    int m_direction;
+
     float m_speed; // 0 or constant, pixel / second
     int m_x, m_y; // Position
   };
