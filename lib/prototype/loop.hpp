@@ -23,7 +23,7 @@ private:
 
       m_timer.registerStart();
 
-      float dt = m_timer.getAvaregeDelta();
+      double dt = m_timer.getAvaregeDelta();
       m_logic->step(dt);
 
       m_widget->render();
@@ -34,7 +34,7 @@ private:
     return 0;
   }
 
-  Timer m_timer;
+  Timer<> m_timer;
   Logic* m_logic;
   Widget* m_widget;
 };

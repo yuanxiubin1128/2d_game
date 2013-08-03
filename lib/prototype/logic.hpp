@@ -4,6 +4,7 @@
 #include "event.hpp"
 #include "world.hpp"
 
+
 namespace prototype
 {
 
@@ -15,7 +16,7 @@ namespace prototype
 
   public:
 
-    void step(float delta_time) {}
+    void step(double delta_time) {}
 
   private:
     EventQueue* m_events;
