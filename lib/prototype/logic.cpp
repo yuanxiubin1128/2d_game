@@ -4,6 +4,7 @@ void prototype::Logic::modifyTrajectories()
 {
   Event e;
   std::vector<Object> objects = m_world->getObjects();
+
   while (m_events->tryPop(e) == true) {
     std::vector<Object>::iterator it = std::find_if(objects.begin(), objects.end(),
                                                     [&e] (const Object& o)
@@ -36,21 +37,21 @@ void prototype::Logic::adjustObject(Object& object, double delta_time)
   switch (object.m_direction)
   {
     case 0: // North
-      object.m_x -= speed; break;
+      new_x = object.m_x - speed; break;
     case 1: // NE
-      object.m_x -= speed * sqtr_half; object.m_y += speed * sqtr_half; break;
+      new_x = object.m_x - speed * sqtr_half; new_y = object.m_y + speed * sqtr_half; break;
     case 2: // East
-      object.m_y += speed; break;
+      new_y = object.m_y + speed; break;
     case 3: // SE
-      object.m_x += speed * sqtr_half; object.m_y += speed * sqtr_half; break;
+      new_x = object.m_x + speed * sqtr_half; new_y = object.m_y + speed * sqtr_half; break;
     case 4: // South
-      object.m_x += speed; break;
+      new_x = object.m_x + speed; break;
     case 5: // SW
-      object.m_x += speed * sqtr_half; object.m_y -= speed * sqtr_half; break;
+      new_x = object.m_x + speed * sqtr_half; new_y = object.m_y - speed * sqtr_half; break;
     case 6: // West
-      object.m_y -= speed; break;
+      new_y = object.m_y - speed; break;
     case 7: // NW
-      object.m_x -= speed * sqtr_half; object.m_y -= speed * sqtr_half; break;
+      new_x = object.m_x - speed * sqtr_half; new_y = object.m_y - speed * sqtr_half; break;
     default:
       // log error
       break;
