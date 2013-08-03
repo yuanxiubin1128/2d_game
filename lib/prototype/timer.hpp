@@ -38,9 +38,9 @@ namespace prototype
     Timer(Timer&&) = delete;
     Timer& operator=(const Timer&) = delete;
 
-
     void registerStart() { m_start = Clock::now(); }
-    void registerStop() {
+    void registerStop()
+    {
       std::chrono::time_point<Clock> stop = Clock::now();
       T elapsed_time = std::chrono::duration_cast<Duration>(stop - m_start).count();
       m_diffs.push_back(elapsed_time);

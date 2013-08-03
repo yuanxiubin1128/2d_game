@@ -14,7 +14,7 @@ class Loop : public Thread
 {
 public:
 
-  Loop(Logic* l, Widget* w) : m_logic(l), m_widget(w) {}
+  Loop(Logic* l, Widget* w) : m_timer(), m_logic(l), m_widget(w) {}
 
 private:
   void* run()
