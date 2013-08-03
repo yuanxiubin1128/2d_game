@@ -52,9 +52,10 @@ void prototype::Logic::adjustObject(Object& object, double delta_time)
       new_y = object.m_y - speed; break;
     case 7: // NW
       new_x = object.m_x - speed * sqtr_half; new_y = object.m_y - speed * sqtr_half; break;
+
+    case 8: // none
     default:
-      // log error
-      break;
+      new_x = object.m_x; new_y = object.m_y;
   };
 
   object.m_x = (new_x < 0 || new_x > m_world->getWidth()) ? object.m_x : new_x;
