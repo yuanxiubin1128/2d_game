@@ -20,7 +20,7 @@ namespace prototype
       FastCyclicBuffer() : m_end(0), m_container() { m_container.fill(T()); }
 
       void push_back(const T& value) { m_container[m_end] = value; increaseindex(); }
-      T getAvarege() const { T retval; for (std::size_t i=0; i<N; retval=m_container[i++]); return retval; }
+      T getSum() const { T retval; for (std::size_t i=0; i<N; retval+=m_container[i++]); return retval; }
 
     private:
       void increaseindex() { m_end++; if (m_end==N) m_end=0; }
@@ -46,7 +46,7 @@ namespace prototype
       m_diffs.push_back(elapsed_time);
     }
 
-    T getAvaregeDelta() const { return (double)1 / m_diffs.getAvarege(); }
+    T getAvaregeDelta() const { return m_diffs.getSum() / (T)N; }
 
   private:
 
