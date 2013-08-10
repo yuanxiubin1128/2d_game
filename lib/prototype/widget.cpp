@@ -23,7 +23,7 @@ void prototype::Widget::render()
 
 void prototype::Widget::paintEvent(QPaintEvent *event)
 {
-  std::vector<Object> objects = m_world->getObjects();
+  std::vector<Object>& objects = m_world->getObjectsRef();
   std::vector<Object>::iterator it;
   for (it = objects.begin(); it != objects.end(); ++it)
     drawObject(*it, event);
@@ -34,10 +34,11 @@ void prototype::Widget::keyPressEvent(QKeyEvent *event)
   Event e;
 
   e.m_id = std::string("polsen");
-  e.m_speed = 1;
+  e.m_speed = 100;  // pixel/s
 
   bool hit = false;
 
+  /// @todo handle multiple pressed keys: up + right, etc
   switch (event->key()) {
     case Qt::Key_Up    : e.m_direction = 0; hit = true; break;
     case Qt::Key_Right : e.m_direction = 2; hit = true; break;
@@ -51,7 +52,7 @@ void prototype::Widget::keyPressEvent(QKeyEvent *event)
     return;
   }
 
-  Widget::keyPressEvent(event);
+  QWidget::keyPressEvent(event);
 }
 
 void prototype::Widget::keyReleaseEvent(QKeyEvent *event)
