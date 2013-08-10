@@ -30,7 +30,7 @@ QT4_WRAP_CPP(prototype_HEADERS_MOC widget.hpp)
 
 include_directories (. ../../lib )
 
-add_executable ( prototype main.cpp widget.cpp ${prototype_HEADERS_MOC} )
+add_executable ( prototype main.cpp widget.cpp logic.cpp ${prototype_HEADERS_MOC} )
 target_link_libraries ( prototype CppUtils ${QT_LIBRARIES} pthread)
 
 add_custom_target( proto
