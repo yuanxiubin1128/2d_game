@@ -28,7 +28,7 @@ namespace prototype
     float getWidth() const { return m_width; }
 
     void addObject(const Object& o) { m_objects.push_back(o); }
-    std::vector<Object> getObjects() { return m_objects; }
+    std::vector<Object>& getObjectsRef() { return m_objects; }
 
   private:
 
