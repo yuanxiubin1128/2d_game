@@ -20,7 +20,7 @@ namespace prototype
     int m_direction;
 
     float m_speed; // 0 or constant, pixel / second
-    int m_x, m_y; // Position
+    float m_x, m_y; // Position
   };
 
 }
