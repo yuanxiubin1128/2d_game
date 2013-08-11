@@ -9,6 +9,7 @@
 prototype::Widget::Widget(EventQueue* e, World* w)
   : m_events(e)
   , m_world(w)
+  , m_fps()
 {
   setWindowTitle("2d_game");
   resize(m_world->getWidth(), m_world->getHeight());
@@ -23,6 +24,11 @@ void prototype::Widget::render()
 
 void prototype::Widget::paintEvent(QPaintEvent *event)
 {
+  QPainter painter(this);
+
+  painter.setPen(QPen(QColor("orange")));
+  painter.drawText(QPointF(m_world->getWidth()-50, 20), m_fps);
+
   std::vector<Object>& objects = m_world->getObjectsRef();
   std::vector<Object>::iterator it;
   for (it = objects.begin(); it != objects.end(); ++it)
@@ -69,12 +75,12 @@ void prototype::Widget::keyReleaseEvent(QKeyEvent *event)
 void prototype::Widget::drawObject(Object& o, QPaintEvent* event)
 {
   QPainter painter(this);
+  QColor orange = QColor("orange");
 
-  QRadialGradient gradient(-3, -3, 10);
-  gradient.setColorAt(0, Qt::yellow);
-  gradient.setColorAt(1, Qt::darkYellow);
+  painter.setPen(QPen(orange));
+  painter.drawText(QPointF(o.m_x+5, o.m_y-15), QString::fromStdString(o.m_id));
 
-  painter.setBrush(gradient);
+  painter.setBrush(QBrush(orange));
   painter.setPen(QPen(Qt::black, 0));
   painter.drawEllipse(o.m_x-10, o.m_y-10, 20, 20);
 }

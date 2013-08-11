@@ -19,6 +19,7 @@ namespace prototype
 
     Widget(EventQueue* e, World* w);
 
+    void setFps(float fps) { m_fps = QString::number(fps, 'f', 2); }
     void render();
 
   signals:
@@ -35,6 +36,7 @@ namespace prototype
 
     EventQueue* m_events;
     World* m_world;
+    QString m_fps;
   };
 
 

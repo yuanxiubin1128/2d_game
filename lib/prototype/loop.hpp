@@ -6,7 +6,6 @@
 #include "widget.hpp"
 
 #include <cpp_utils/Thread.hpp>
-#include <cpp_utils/Logger.hpp>
 
 #include <ctime>
 
@@ -27,11 +26,13 @@ private:
       m_timer.registerStart();
 
       double dt = m_timer.getAvaregeDelta() / 1000000.0;
+      const double fps = double(1) / dt;
+      logEvery100thFps(fps);
+
       m_logic->step(dt);
       m_widget->render();
 
       slowDown(0.01); // gives me ~100fps on a 6core xeon
-      logFps(dt);
 
       m_timer.registerStop();
     }
@@ -39,15 +40,12 @@ private:
     return 0;
   }
 
-  void logFps(double delta) const
+  void logEvery100thFps(double fps) const
   {
-    const double fps = double(1) / delta;
     static int i;
     ++i;
     if (i == 100) {
-      LOG_BEGIN(Logger::INFO)
-        LOG_PROP("FPS: ", fps);
-      LOG_END("eh");
+      m_widget->setFps(fps);
       i = 0;
     }
   }
