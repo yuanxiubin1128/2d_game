@@ -62,5 +62,5 @@ void prototype::Logic::adjustObject(Object& object, double delta_time)
   };
 
   object.m_x = (new_x < 0 || new_x > m_world->getWidth()) ? object.m_x : new_x;
-  object.m_y = (new_y < 0 || new_x > m_world->getHeight()) ? object.m_y : new_y;
+  object.m_y = (new_y < 0 || new_y > m_world->getHeight()) ? object.m_y : new_y;
 }
