@@ -8,27 +8,34 @@
 namespace prototype
 {
 
-  template <typename T = double,
-            std::size_t N = 5,
-            typename Clock = std::chrono::system_clock,
-            typename Duration = std::chrono::microseconds>
+  template <typename Duration_ = std::chrono::microseconds,
+            typename Clock_ = std::chrono::system_clock,
+            std::size_t N_ = 5>
   class Timer
   {
+  public:
+
+    typedef Duration_ Duration;
+    typedef typename Duration_::rep RepT;
+    typedef std::chrono::time_point<Clock_> TimePoint;
+
+  private:
+
     class FastCyclicBuffer
     {
     public:
-      FastCyclicBuffer() : m_end(0), m_container() { m_container.fill(T()); }
+      FastCyclicBuffer() : m_end(0), m_container() { m_container.fill(RepT()); }
 
-      void push_back(const T& value) { m_container[m_end] = value; increaseindex(); }
-      T getSum() const { T retval; for (std::size_t i=0; i<N; retval+=m_container[i++]); return retval; }
+      void push_back(const RepT& value) { m_container[m_end] = value; increaseindex(); }
+      RepT getSum() const { RepT retval = RepT(); for (std::size_t i=0; i<N_; retval+=m_container[i++]); return retval; }
+      float getAvarege() const { return getSum() / float(N_); }
 
     private:
-      void increaseindex() { m_end++; if (m_end==N) m_end=0; }
+      void increaseindex() { m_end++; if (m_end==N_) m_end=0; }
 
       std::size_t m_end;
-      std::array<T, N> m_container;
+      std::array<RepT, N_> m_container;
     };
-
 
   public:
 
@@ -38,19 +45,19 @@ namespace prototype
     Timer(Timer&&) = delete;
     Timer& operator=(const Timer&) = delete;
 
-    void registerStart() { m_start = Clock::now(); }
-    void registerStop()
-    {
-      std::chrono::time_point<Clock> stop = Clock::now();
-      T elapsed_time = std::chrono::duration_cast<Duration>(stop - m_start).count();
-      m_diffs.push_back(elapsed_time);
+    void registerStart(TimePoint now = Clock_::now()) { m_start = now; }
+    void registerStop(TimePoint now = Clock_::now()) {
+      m_diffs.push_back(std::chrono::duration_cast<Duration>(now - m_start).count());
     }
 
-    T getAvaregeDelta() const { return m_diffs.getSum() / (T)N; }
+    TimePoint getTime() const { return Clock_::now(); }
+
+    float getAvaregeDelta() const { return m_diffs.getAvarege(); }
+
 
   private:
 
-    std::chrono::time_point<Clock> m_start;
+    TimePoint m_start;
     FastCyclicBuffer m_diffs;
   };
 

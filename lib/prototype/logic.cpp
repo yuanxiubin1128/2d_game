@@ -19,23 +19,23 @@ void prototype::Logic::modifyTrajectories()
   }
 }
 
-void prototype::Logic::calculateNewPositions(double delta_time)
+void prototype::Logic::calculateNewPositions(float delta_seconds)
 {
   std::vector<Object>& objects = m_world->getObjectsRef();
   std::vector<Object>::iterator it;
   for (it = objects.begin(); it != objects.end(); ++it)
-    adjustObject(*it, delta_time);
+    adjustObject(*it, delta_seconds);
 }
 
-void prototype::Logic::adjustObject(Object& object, double delta_time)
+void prototype::Logic::adjustObject(Object& object, float delta_seconds)
 {
   if (object.m_direction == 8)
     return;
 
-  double speed = object.m_speed * delta_time;
-  constexpr double sqtr_half = (double)1 / sqrt(2);
-  double new_x = object.m_x;
-  double new_y = object.m_y;
+  float speed = object.m_speed * delta_seconds;
+  constexpr float sqtr_half = 1.0 / sqrt(2);
+  float new_x = object.m_x;
+  float new_y = object.m_y;
 
   switch (object.m_direction)
   {

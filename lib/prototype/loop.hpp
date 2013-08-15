@@ -19,20 +19,33 @@ public:
   Loop(Logic* l, Widget* w) : m_timer(), m_logic(l), m_widget(w) {}
 
 private:
+
+  typedef Timer<std::chrono::microseconds> MicrosecondsTimer;
+  typedef std::chrono::duration<float> sec;
+
   void* run() override
   {
+    constexpr MicrosecondsTimer::Duration fixedTimeSlice = std::chrono::microseconds(16*1000);
+    constexpr sec fixedTimeSliceInSec = std::chrono::duration_cast<sec>(fixedTimeSlice);
+
+    MicrosecondsTimer::TimePoint simulationTime = m_timer.getTime();
+    MicrosecondsTimer::TimePoint realTime;
+
     while(m_isRunning) {
 
-      m_timer.registerStart();
+      realTime = m_timer.getTime();
+      m_timer.registerStart(realTime);
 
-      double dt = m_timer.getAvaregeDelta() / 1000000.0;
-      const double fps = double(1) / dt;
-      logEvery100thFps(fps);
+      while (simulationTime < realTime){
+        simulationTime += fixedTimeSlice;
+        m_logic->step(fixedTimeSliceInSec.count());
+      }
 
-      m_logic->step(dt);
       m_widget->render();
+      nanoSleep();
 
-      slowDown(0.01); // gives me ~100fps on a 6core xeon
+      MicrosecondsTimer::Duration delta(static_cast<MicrosecondsTimer::RepT>(m_timer.getAvaregeDelta()));
+      logFpsEverySecond(1.0 /std::chrono::duration_cast<sec>(delta).count());
 
       m_timer.registerStop();
     }
@@ -40,27 +53,27 @@ private:
     return 0;
   }
 
-  void logEvery100thFps(double fps) const
+  void logFpsEverySecond(float fps) const
   {
-    static int i;
-    ++i;
-    if (i == 100) {
+    static MicrosecondsTimer::TimePoint lastLog;
+    MicrosecondsTimer::TimePoint now = m_timer.getTime();
+    std::chrono::duration<float> elapsed_time = now - lastLog;
+    if (elapsed_time.count() > 1.0) {
       m_widget->setFps(fps);
-      i = 0;
+      lastLog = now;
     }
   }
 
-  void slowDown(double s) const
+  void nanoSleep(int64_t nanoSeconds = 1000000) const
   {
-    const int nano = 1000000000;
     struct timespec ts;
     ts.tv_sec = 0;
-    ts.tv_nsec = s * nano;
+    ts.tv_nsec = nanoSeconds;
     nanosleep(&ts, 0);
   }
 
 
-  Timer<> m_timer;
+  MicrosecondsTimer m_timer;
   Logic* m_logic;
   Widget* m_widget;
 };

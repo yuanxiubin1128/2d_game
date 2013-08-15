@@ -18,12 +18,12 @@ namespace prototype
 
   public:
 
-    void step(double delta_time) { modifyTrajectories(); calculateNewPositions(delta_time); }
+    void step(float delta_seconds) { modifyTrajectories(); calculateNewPositions(delta_seconds); }
 
   private:
     void modifyTrajectories();
-    void calculateNewPositions(double delta_time);
-    void adjustObject(Object& object, double delta_time);
+    void calculateNewPositions(float delta_seconds);
+    void adjustObject(Object& object, float delta_seconds);
 
     EventQueue* m_events;
     World* m_world;
