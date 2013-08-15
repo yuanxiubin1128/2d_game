@@ -6,6 +6,9 @@
 
 #include <QtGui/QWidget>
 
+class QPaintEvent;
+class QKeyEvent;
+
 namespace prototype
 {
 

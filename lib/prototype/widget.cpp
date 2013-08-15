@@ -22,20 +22,20 @@ void prototype::Widget::render()
   emit renderLoopBack();
 }
 
-void prototype::Widget::paintEvent(QPaintEvent *event)
+void prototype::Widget::paintEvent(QPaintEvent *pe)
 {
   QPainter painter(this);
 
-  painter.setPen(QPen(QColor("orange")));
+  painter.setPen(QPen(QColor("black")));
   painter.drawText(QPointF(m_world->getWidth()-50, 20), m_fps);
 
   std::vector<Object>& objects = m_world->getObjectsRef();
   std::vector<Object>::iterator it;
   for (it = objects.begin(); it != objects.end(); ++it)
-    drawObject(*it, event);
+    drawObject(*it, pe);
 }
 
-void prototype::Widget::keyPressEvent(QKeyEvent *event)
+void prototype::Widget::keyPressEvent(QKeyEvent *ke)
 {
   Event e;
 
@@ -45,7 +45,7 @@ void prototype::Widget::keyPressEvent(QKeyEvent *event)
   bool hit = false;
 
   /// @todo handle multiple pressed keys: up + right, etc
-  switch (event->key()) {
+  switch (ke->key()) {
     case Qt::Key_Up    : e.m_direction = 0; hit = true; break;
     case Qt::Key_Right : e.m_direction = 2; hit = true; break;
     case Qt::Key_Down  : e.m_direction = 4; hit = true; break;
@@ -58,10 +58,10 @@ void prototype::Widget::keyPressEvent(QKeyEvent *event)
     return;
   }
 
-  QWidget::keyPressEvent(event);
+  QWidget::keyPressEvent(ke);
 }
 
-void prototype::Widget::keyReleaseEvent(QKeyEvent *event)
+void prototype::Widget::keyReleaseEvent(QKeyEvent* /*ke*/)
 {
   Event e;
 
@@ -72,15 +72,14 @@ void prototype::Widget::keyReleaseEvent(QKeyEvent *event)
   m_events->push(e);
 }
 
-void prototype::Widget::drawObject(Object& o, QPaintEvent* event)
+void prototype::Widget::drawObject(Object& o, QPaintEvent* /*pe*/)
 {
   QPainter painter(this);
-  QColor orange = QColor("orange");
 
-  painter.setPen(QPen(orange));
+  painter.setPen(QPen(QColor("black")));
   painter.drawText(QPointF(o.m_x+5, o.m_y-15), QString::fromStdString(o.m_id));
 
-  painter.setBrush(QBrush(orange));
+  painter.setBrush(QBrush(QColor("orange")));
   painter.setPen(QPen(Qt::black, 0));
   painter.drawEllipse(o.m_x-10, o.m_y-10, 20, 20);
 }
